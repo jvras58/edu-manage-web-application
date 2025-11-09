@@ -1,5 +1,6 @@
 import { GraduationCap } from "lucide-react"
 import { LoginForm } from "@/modules/auth/components/auth-components"
+import Link from "next/link"
 
 export default function LoginPage() {
   return (
@@ -16,6 +17,19 @@ export default function LoginPage() {
             <p className="text-gray-600 text-balance">Portal do Professor</p>
           </div>
           <LoginForm />
+          
+          <div className="pt-4 border-t text-center">
+            <p className="text-sm text-gray-600">
+              Não tem uma conta?{" "}
+              <Link 
+                href="/register" 
+                className="text-blue-600 hover:text-blue-700 font-medium hover:underline"
+              >
+                Criar conta
+              </Link>
+            </p>
+          </div>
+
           <div className="pt-4 border-t text-center space-y-2">
             <p className="text-sm text-gray-600">Contas de demonstração:</p>
             <div className="text-xs text-gray-500 space-y-1">
