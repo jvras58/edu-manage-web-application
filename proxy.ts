@@ -1,68 +1,100 @@
-import { NextResponse } from "next/server"
-import type { NextRequest } from "next/server"
-import { verifyToken } from "@/lib/auth"
+import { NextRequest, NextResponse } from 'next/server'
+import { verifyToken } from '@/lib/auth'
 
-// Rotas que requerem autenticação
-const protectedRoutes = ["/dashboard", "/alunos", "/turmas", "/criterios", "/notificacoes"]
+// Rotas públicas que não precisam de autenticação
+const publicRoutes = ['/login', '/register']
 
-// Rotas apenas para admin
-const adminRoutes = ["/admin"]
+// Rotas protegidas que exigem autenticação
+const protectedRoutes = [
+  '/dashboard',
+  '/alunos',
+  '/turmas',
+  '/criterios',
+  '/notificacoes',
+]
+
+// Rotas de API protegidas
+const protectedApiRoutes = [
+  '/api/alunos',
+  '/api/turmas',
+  '/api/criterios',
+  '/api/notificacoes',
+  '/api/dashboard',
+]
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  if (pathname.startsWith("/api/")) {
-    return NextResponse.next()
+  // 1. Verificar se a rota é protegida
+  const isProtectedRoute = protectedRoutes.some((route) =>
+    pathname.startsWith(route)
+  )
+  const isProtectedApiRoute = protectedApiRoutes.some((route) =>
+    pathname.startsWith(route)
+  )
+  const isPublicRoute = publicRoutes.some((route) => pathname.startsWith(route))
+
+  // 2. Obter token do cookie
+  const token = request.cookies.get('auth-token')?.value
+
+  // 3. Se não há token e a rota é protegida, redirecionar para login
+  if (!token && (isProtectedRoute || isProtectedApiRoute)) {
+    if (isProtectedApiRoute) {
+      // Para APIs, retornar 401
+      return NextResponse.json(
+        { error: 'Não autorizado' },
+        { status: 401 }
+      )
+    }
+    // Para páginas, redirecionar para login
+    const loginUrl = new URL('/login', request.url)
+    loginUrl.searchParams.set('redirect', pathname)
+    return NextResponse.redirect(loginUrl)
   }
 
-  // Verifica se é uma rota protegida
-  const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route))
-  const isAdminRoute = adminRoutes.some((route) => pathname.startsWith(route))
+  // 4. Verificar validade do token
+  if (token) {
+    const user = await verifyToken(token)
 
-  if (!isProtectedRoute && !isAdminRoute) {
-    return NextResponse.next()
-  }
+    // Token inválido ou expirado
+    if (!user) {
+      // Limpar cookie inválido
+      const response = NextResponse.redirect(new URL('/login', request.url))
+      response.cookies.delete('auth-token')
+      return response
+    }
 
-  // Obtém o token do cookie
-  const token = request.cookies.get("auth-token")?.value
+    // 5. Se usuário está autenticado e tenta acessar rota pública, redirecionar para dashboard
+    if (isPublicRoute && pathname !== '/') {
+      return NextResponse.redirect(new URL('/dashboard', request.url))
+    }
 
-  if (!token) {
-    // Redireciona para login se não houver token
-    const url = new URL("/login", request.url)
-    url.searchParams.set("redirect", pathname)
-    return NextResponse.redirect(url)
-  }
+    // 6. Adicionar informações do usuário aos headers da requisição (opcional)
+    const requestHeaders = new Headers(request.headers)
+    requestHeaders.set('x-user-id', user.userId)
+    requestHeaders.set('x-user-email', user.email)
+    requestHeaders.set('x-user-role', user.role)
 
-  // Verifica o token
-  const payload = await verifyToken(token)
-
-  if (!payload) {
-    // Token inválido, redireciona para login
-    const url = new URL("/login", request.url)
-    url.searchParams.set("redirect", pathname)
-    const response = NextResponse.redirect(url)
-    response.cookies.delete("auth-token")
-    return response
-  }
-
-  // Verifica se é rota admin e usuário não é admin
-  if (isAdminRoute && payload.role !== "admin") {
-    return NextResponse.redirect(new URL("/dashboard", request.url))
+    return NextResponse.next({
+      request: {
+        headers: requestHeaders,
+      },
+    })
   }
 
   return NextResponse.next()
 }
 
+// Configurar rotas onde o middleware deve executar
 export const config = {
   matcher: [
     /*
-     * Match all request paths except:
-     * - api (API routes)
+     * Match all request paths except for the ones starting with:
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
-     * - public files (images, etc)
+     * - public files (public folder)
      */
-    "/((?!api/|_next/static|_next/image|favicon.ico|.*\\.png$|.*\\.jpg$|.*\\.svg$|.*\\.ico$).*)",
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.png$|.*\\.jpg$|.*\\.jpeg$|.*\\.svg$|.*\\.gif$).*)',
   ],
 }

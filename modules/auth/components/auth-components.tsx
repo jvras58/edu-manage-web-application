@@ -1,15 +1,14 @@
 "use client"
 
-import type React from "react"
-import { useState } from "react"
+import { useActionState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useToast } from "@/hooks/use-toast"
-import { GraduationCap, Loader2 } from "lucide-react"
-import { loginSchema, type LoginFormData } from "@/modules/auth/schemas/auth.schema"
-import { z } from "zod"
+import { Loader2 } from "lucide-react"
+import { loginAction } from "@/modules/auth/actions/auth.actions"
+import { useAuthStore } from "@/lib/stores/auth-store"
 
 interface LoginFormProps {
   onSuccess?: () => void
@@ -18,67 +17,20 @@ interface LoginFormProps {
 export function LoginForm({ onSuccess }: LoginFormProps) {
   const router = useRouter()
   const { toast } = useToast()
-  const [loading, setLoading] = useState(false)
-  const [formData, setFormData] = useState<LoginFormData>({
-    email: "",
-    password: "",
-  })
-  const [errors, setErrors] = useState<Partial<Record<keyof LoginFormData, string>>>({})
+  const setUser = useAuthStore((state) => state.setUser)
 
-  const validateForm = (): boolean => {
-    try {
-      loginSchema.parse(formData)
-      setErrors({})
-      return true
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        const fieldErrors: Partial<Record<keyof LoginFormData, string>> = {}
-        error.issues.forEach((issue) => {
-          if (issue.path[0]) {
-            fieldErrors[issue.path[0] as keyof LoginFormData] = issue.message
-          }
-        })
-        setErrors(fieldErrors)
-      }
-      return false
-    }
-  }
+  // React 19 useActionState hook
+  const [state, formAction, isPending] = useActionState(loginAction, null)
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    if (!validateForm()) {
-      toast({
-        title: "Erro de validação",
-        description: "Por favor, corrija os erros no formulário",
-        variant: "destructive",
-      })
-      return
-    }
-
-    setLoading(true)
-
-    try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      })
-
-      const contentType = response.headers.get("content-type")
-      if (!contentType || !contentType.includes("application/json")) {
-        throw new Error("Resposta inválida do servidor")
-      }
-
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.error || "Erro ao fazer login")
-      }
+  // Efeito para tratar resposta da action
+  useEffect(() => {
+    if (state?.success && state.user) {
+      // Atualizar store global do Zustand
+      setUser(state.user)
 
       toast({
         title: "Login realizado com sucesso!",
-        description: `Bem-vindo, ${data.user.nome}`,
+        description: `Bem-vindo, ${state.user.nome}`,
       })
 
       if (onSuccess) {
@@ -87,60 +39,53 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
         router.push("/dashboard")
         router.refresh()
       }
-    } catch (error) {
-      console.error("[LoginForm] Login error:", error)
+    } else if (state?.error) {
       toast({
         title: "Erro ao fazer login",
-        description: error instanceof Error ? error.message : "Tente novamente",
+        description: state.error,
         variant: "destructive",
       })
-    } finally {
-      setLoading(false)
     }
-  }
-
-  const handleInputChange = (field: keyof LoginFormData, value: string) => {
-    setFormData({ ...formData, [field]: value })
-    // Limpa o erro do campo quando o usuário começar a digitar
-    if (errors[field]) {
-      setErrors({ ...errors, [field]: undefined })
-    }
-  }
+  }, [state, router, toast, setUser, onSuccess])
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form action={formAction} className="space-y-4">
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
         <Input
           id="email"
+          name="email"
           type="email"
           placeholder="seu.email@escola.com"
-          value={formData.email}
-          onChange={(e) => handleInputChange("email", e.target.value)}
           required
-          disabled={loading}
-          className={errors.email ? "border-red-500" : ""}
+          disabled={isPending}
+          autoComplete="email"
         />
-        {errors.email && <p className="text-sm text-red-500">{errors.email}</p>}
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="password">Senha</Label>
         <Input
           id="password"
+          name="password"
           type="password"
           placeholder="••••••••"
-          value={formData.password}
-          onChange={(e) => handleInputChange("password", e.target.value)}
           required
-          disabled={loading}
-          className={errors.password ? "border-red-500" : ""}
+          disabled={isPending}
+          autoComplete="current-password"
         />
-        {errors.password && <p className="text-sm text-red-500">{errors.password}</p>}
       </div>
 
-      <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" disabled={loading}>
-        {loading ? (
+      {state?.error && (
+        <p className="text-sm text-red-500 text-center">{state.error}</p>
+      )}
+
+      <Button 
+        type="submit" 
+        className="w-full bg-blue-600 hover:bg-blue-700" 
+        disabled={isPending}
+      >
+        {isPending ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             Entrando...
