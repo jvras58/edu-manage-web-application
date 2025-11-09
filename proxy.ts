@@ -8,7 +8,7 @@ const protectedRoutes = ["/dashboard", "/alunos", "/turmas", "/criterios", "/not
 // Rotas apenas para admin
 const adminRoutes = ["/admin"]
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   if (pathname.startsWith("/api/")) {

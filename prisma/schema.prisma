@@ -7,101 +7,101 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("NEON_DATABASE_URL")
+  url      = env("DATABASE_URL")
 }
 
 model Usuario {
-  id                String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  nome              String             @db.VarChar(255)
-  email             String             @unique @db.VarChar(255)
-  senha_hash        String             @db.Text
-  role              String             @db.VarChar(20) // 'admin' ou 'professor'
-  created_at        DateTime           @default(now()) @db.Timestamp()
-  updated_at        DateTime           @default(now()) @updatedAt @db.Timestamp()
-  
-  professor_turmas  ProfessorTurma[]
-  notificacoes      Notificacao[]
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  nome       String   @db.VarChar(255)
+  email      String   @unique @db.VarChar(255)
+  senha_hash String   @db.Text
+  role       String   @db.VarChar(20) // 'admin' ou 'professor'
+  created_at DateTime @default(now()) @db.Timestamp()
+  updated_at DateTime @default(now()) @updatedAt @db.Timestamp()
+
+  professor_turmas ProfessorTurma[]
+  notificacoes     Notificacao[]
 
   @@map("usuarios")
 }
 
 model Turma {
-  id                    String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  nome                  String                @db.VarChar(255)
-  disciplina            String                @db.VarChar(100)
-  ano_letivo            String                @db.VarChar(10)
-  created_at            DateTime              @default(now()) @db.Timestamp()
-  updated_at            DateTime              @default(now()) @updatedAt @db.Timestamp()
-  
-  professor_turmas      ProfessorTurma[]
-  aluno_turmas          AlunoTurma[]
-  criterios_avaliacao   CriterioAvaliacao[]
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  nome       String   @db.VarChar(255)
+  disciplina String   @db.VarChar(100)
+  ano_letivo String   @db.VarChar(10)
+  created_at DateTime @default(now()) @db.Timestamp()
+  updated_at DateTime @default(now()) @updatedAt @db.Timestamp()
+
+  professor_turmas    ProfessorTurma[]
+  aluno_turmas        AlunoTurma[]
+  criterios_avaliacao CriterioAvaliacao[]
 
   @@map("turmas")
 }
 
 model Aluno {
-  id            String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  nome          String       @db.VarChar(255)
-  matricula     String       @unique @db.VarChar(50)
-  email         String?      @db.VarChar(255)
-  foto_url      String?      @db.Text
-  status        String       @default("ativo") @db.VarChar(20) // ativo, inativo, trancado
-  created_at    DateTime     @default(now()) @db.Timestamp()
-  updated_at    DateTime     @default(now()) @updatedAt @db.Timestamp()
-  
-  aluno_turmas  AlunoTurma[]
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  nome       String   @db.VarChar(255)
+  matricula  String   @unique @db.VarChar(50)
+  email      String?  @db.VarChar(255)
+  foto_url   String?  @db.Text
+  status     String   @default("ativo") @db.VarChar(20) // ativo, inativo, trancado
+  created_at DateTime @default(now()) @db.Timestamp()
+  updated_at DateTime @default(now()) @updatedAt @db.Timestamp()
+
+  aluno_turmas AlunoTurma[]
 
   @@map("alunos")
 }
 
 model ProfessorTurma {
-  professor_id  String   @db.Uuid
-  turma_id      String   @db.Uuid
-  created_at    DateTime @default(now()) @db.Timestamp()
-  
-  professor     Usuario  @relation(fields: [professor_id], references: [id], onDelete: Cascade)
-  turma         Turma    @relation(fields: [turma_id], references: [id], onDelete: Cascade)
+  professor_id String   @db.Uuid
+  turma_id     String   @db.Uuid
+  created_at   DateTime @default(now()) @db.Timestamp()
+
+  professor Usuario @relation(fields: [professor_id], references: [id], onDelete: Cascade)
+  turma     Turma   @relation(fields: [turma_id], references: [id], onDelete: Cascade)
 
   @@id([professor_id, turma_id])
   @@map("professor_turma")
 }
 
 model AlunoTurma {
-  aluno_id    String   @db.Uuid
-  turma_id    String   @db.Uuid
-  created_at  DateTime @default(now()) @db.Timestamp()
-  
-  aluno       Aluno    @relation(fields: [aluno_id], references: [id], onDelete: Cascade)
-  turma       Turma    @relation(fields: [turma_id], references: [id], onDelete: Cascade)
+  aluno_id   String   @db.Uuid
+  turma_id   String   @db.Uuid
+  created_at DateTime @default(now()) @db.Timestamp()
+
+  aluno Aluno @relation(fields: [aluno_id], references: [id], onDelete: Cascade)
+  turma Turma @relation(fields: [turma_id], references: [id], onDelete: Cascade)
 
   @@id([aluno_id, turma_id])
   @@map("aluno_turma")
 }
 
 model CriterioAvaliacao {
-  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  turma_id    String   @db.Uuid
-  nome        String   @db.VarChar(255)
-  peso        Decimal  @db.Decimal(5, 2) // ex: 30.00
-  descricao   String?  @db.Text
-  created_at  DateTime @default(now()) @db.Timestamp()
-  updated_at  DateTime @default(now()) @updatedAt @db.Timestamp()
-  
-  turma       Turma    @relation(fields: [turma_id], references: [id], onDelete: Cascade)
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  turma_id   String   @db.Uuid
+  nome       String   @db.VarChar(255)
+  peso       Decimal  @db.Decimal(5, 2) // ex: 30.00
+  descricao  String?  @db.Text
+  created_at DateTime @default(now()) @db.Timestamp()
+  updated_at DateTime @default(now()) @updatedAt @db.Timestamp()
+
+  turma Turma @relation(fields: [turma_id], references: [id], onDelete: Cascade)
 
   @@map("criterios_avaliacao")
 }
 
 model Notificacao {
-  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  usuario_id  String   @db.Uuid
-  tipo        String   @db.VarChar(50) // info, sucesso, alerta, erro
-  mensagem    String   @db.Text
-  lida        Boolean  @default(false)
-  created_at  DateTime @default(now()) @db.Timestamp()
-  
-  usuario     Usuario  @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  usuario_id String   @db.Uuid
+  tipo       String   @db.VarChar(50) // info, sucesso, alerta, erro
+  mensagem   String   @db.Text
+  lida       Boolean  @default(false)
+  created_at DateTime @default(now()) @db.Timestamp()
+
+  usuario Usuario @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
 
   @@map("notificacoes")
 }
