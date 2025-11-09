@@ -42,12 +42,18 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Credenciais inválidas" }, { status: 401 })
     }
 
+    // Valida e converte o role
+    const role = usuario.role as "admin" | "professor"
+    if (role !== "admin" && role !== "professor") {
+      return NextResponse.json({ error: "Tipo de usuário inválido" }, { status: 401 })
+    }
+
     // Gera token JWT
     const token = await generateToken({
       userId: usuario.id,
       email: usuario.email,
       nome: usuario.nome,
-      role: usuario.role,
+      role: role,
     })
 
     // Define cookie
