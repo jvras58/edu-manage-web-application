@@ -1,14 +1,18 @@
 import { PrismaClient } from '@prisma/client'
+import { hashPassword } from '../lib/password'
 
 const prisma = new PrismaClient()
 
 async function main() {
+  // Senha padrão para todos os usuários de teste: "123456"
+  const senhaHash = await hashPassword('123456')
+  
   // Criar usuários
   const admin = await prisma.usuario.create({
     data: {
       nome: 'Administrador',
       email: 'admin@edumanage.com',
-      senha_hash: '$2b$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy',
+      senha_hash: senhaHash,
       role: 'admin'
     }
   })
@@ -17,7 +21,7 @@ async function main() {
     data: {
       nome: 'Maria Silva',
       email: 'maria.silva@edumanage.com',
-      senha_hash: '$2b$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy',
+      senha_hash: senhaHash,
       role: 'professor'
     }
   })
@@ -26,7 +30,7 @@ async function main() {
     data: {
       nome: 'João Santos',
       email: 'joao.santos@edumanage.com',
-      senha_hash: '$2b$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy',
+      senha_hash: senhaHash,
       role: 'professor'
     }
   })
