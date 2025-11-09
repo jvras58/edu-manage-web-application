@@ -4,9 +4,8 @@ import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
-  generator: 'v0.app',
+  title: 'EduMind - Plataforma de Gestão Educacional',
+  description: 'Created with Next.js 16',
   icons: {
     icon: [
       {
