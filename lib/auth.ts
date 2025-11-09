@@ -5,7 +5,7 @@ const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || "edumanage
 
 const JWT_EXPIRATION = "24h" // Token expira em 24 horas
 
-export interface JWTPayload {
+export interface UserPayload {
   userId: string
   email: string
   nome: string
@@ -13,7 +13,7 @@ export interface JWTPayload {
 }
 
 // Gera um token JWT
-export async function generateToken(payload: JWTPayload): Promise<string> {
+export async function generateToken(payload: UserPayload): Promise<string> {
   const token = await new SignJWT({ ...payload })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
@@ -24,10 +24,10 @@ export async function generateToken(payload: JWTPayload): Promise<string> {
 }
 
 // Verifica e decodifica um token JWT
-export async function verifyToken(token: string): Promise<JWTPayload | null> {
+export async function verifyToken(token: string): Promise<UserPayload | null> {
   try {
     const { payload } = await jwtVerify(token, JWT_SECRET)
-    return payload as JWTPayload
+    return payload as unknown as UserPayload
   } catch (error) {
     console.error("[v0] Token verification failed:", error)
     return null
@@ -60,7 +60,7 @@ export async function clearTokenCookie(): Promise<void> {
 }
 
 // Obtém o usuário atual a partir do token
-export async function getCurrentUser(): Promise<JWTPayload | null> {
+export async function getCurrentUser(): Promise<UserPayload | null> {
   const token = await getTokenFromCookie()
   if (!token) return null
 
