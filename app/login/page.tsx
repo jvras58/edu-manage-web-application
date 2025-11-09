@@ -127,7 +127,7 @@ export default function LoginPage() {
             <div className="text-xs text-gray-500 space-y-1">
               <p>Admin: admin@edumanage.com</p>
               <p>Professor: maria.silva@edumanage.com</p>
-              <p className="font-medium">Senha: senha123</p>
+              <p className="font-medium">Senha: 123456</p>
             </div>
           </div>
         </div>
