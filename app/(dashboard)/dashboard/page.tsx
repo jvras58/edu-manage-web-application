@@ -102,9 +102,9 @@ export default function DashboardPage() {
                 <div key={item.status} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                   <div className="flex items-center gap-3">
                     <Badge variant={getStatusBadge(item.status)}>{item.status}</Badge>
-                    <span className="text-sm text-gray-600">{Number.parseInt(item.total)} alunos</span>
+                    <span className="text-sm text-gray-600">{item.total} alunos</span>
                   </div>
-                  <span className="text-lg font-semibold text-gray-900">{Number.parseInt(item.total)}</span>
+                  <span className="text-lg font-semibold text-gray-900">{item.total}</span>
                 </div>
               ))
             ) : (
@@ -127,7 +127,7 @@ export default function DashboardPage() {
                         {turma.disciplina} • {turma.ano_letivo}
                       </p>
                     </div>
-                    <Badge variant="info">{Number.parseInt(turma.total_alunos)} alunos</Badge>
+                    <Badge variant="info">{turma.total_alunos} alunos</Badge>
                   </div>
                 </div>
               ))
