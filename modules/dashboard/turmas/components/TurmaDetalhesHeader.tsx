@@ -1,15 +1,15 @@
-"use client"
+'use client';
 
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Pencil } from "lucide-react"
-import Link from "next/link"
-import { useTurmaDetalhes } from "@/modules/dashboard/turmas/providers/TurmaDetalhesProvider"
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { ArrowLeft, Pencil } from 'lucide-react';
+import Link from 'next/link';
+import { useTurmaDetalhes } from '@/modules/dashboard/turmas/providers/TurmaDetalhesProvider';
 
 export function TurmaDetalhesHeader() {
-  const { turma, setEditDialogOpen } = useTurmaDetalhes()
+  const { turma, setEditDialogOpen } = useTurmaDetalhes();
 
-  if (!turma) return null
+  if (!turma) return null;
 
   return (
     <div className="flex items-start justify-between gap-4">
@@ -32,5 +32,5 @@ export function TurmaDetalhesHeader() {
         Editar
       </Button>
     </div>
-  )
+  );
 }

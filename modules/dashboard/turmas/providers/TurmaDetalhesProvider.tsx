@@ -1,80 +1,96 @@
-"use client"
+'use client';
 
-import { createContext, useContext, useEffect, useState, ReactNode } from "react"
-import { useToast } from "@/hooks/use-toast"
-import { useRouter } from "next/navigation"
-import { Turma, Aluno, Criterio } from "@/modules/dashboard/turmas/types/turmas.types"
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from 'react';
+import { useToast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
+import {
+  Turma,
+  Aluno,
+  Criterio,
+} from '@/modules/dashboard/turmas/types/turmas.types';
 
 interface TurmaDetalhesContextType {
-  loading: boolean
-  turma: Turma | null
-  alunos: Aluno[]
-  criterios: Criterio[]
-  editDialogOpen: boolean
-  setEditDialogOpen: (open: boolean) => void
-  fetchTurmaDetalhes: () => Promise<void>
+  loading: boolean;
+  turma: Turma | null;
+  alunos: Aluno[];
+  criterios: Criterio[];
+  editDialogOpen: boolean;
+  setEditDialogOpen: (open: boolean) => void;
+  fetchTurmaDetalhes: () => Promise<void>;
 }
 
-const TurmaDetalhesContext = createContext<TurmaDetalhesContextType | undefined>(undefined)
+const TurmaDetalhesContext = createContext<
+  TurmaDetalhesContextType | undefined
+>(undefined);
 
 export function TurmaDetalhesProvider({
   children,
-  turmaId
+  turmaId,
 }: {
-  children: ReactNode
-  turmaId: string
+  children: ReactNode;
+  turmaId: string;
 }) {
-  const { toast } = useToast()
-  const router = useRouter()
-  const [loading, setLoading] = useState(true)
-  const [turma, setTurma] = useState<Turma | null>(null)
-  const [alunos, setAlunos] = useState<Aluno[]>([])
-  const [criterios, setCriterios] = useState<Criterio[]>([])
-  const [editDialogOpen, setEditDialogOpen] = useState(false)
+  const { toast } = useToast();
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const [turma, setTurma] = useState<Turma | null>(null);
+  const [alunos, setAlunos] = useState<Aluno[]>([]);
+  const [criterios, setCriterios] = useState<Criterio[]>([]);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
 
   const fetchTurmaDetalhes = async () => {
     try {
-      const response = await fetch(`/api/turmas/${turmaId}`)
-      if (!response.ok) throw new Error("Erro ao carregar turma")
+      const response = await fetch(`/api/turmas/${turmaId}`);
+      if (!response.ok) throw new Error('Erro ao carregar turma');
 
-      const data = await response.json()
-      setTurma(data.turma)
-      setAlunos(data.alunos)
-      setCriterios(data.criterios)
+      const data = await response.json();
+      setTurma(data.turma);
+      setAlunos(data.alunos);
+      setCriterios(data.criterios);
     } catch (error) {
       toast({
-        title: "Erro ao carregar turma",
-        variant: "destructive",
-      })
-      router.push("/turmas")
+        title: 'Erro ao carregar turma',
+        variant: 'destructive',
+      });
+      router.push('/turmas');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchTurmaDetalhes()
-  }, [turmaId])
+    fetchTurmaDetalhes();
+  }, [turmaId]);
 
   return (
-    <TurmaDetalhesContext.Provider value={{
-      loading,
-      turma,
-      alunos,
-      criterios,
-      editDialogOpen,
-      setEditDialogOpen,
-      fetchTurmaDetalhes,
-    }}>
+    <TurmaDetalhesContext.Provider
+      value={{
+        loading,
+        turma,
+        alunos,
+        criterios,
+        editDialogOpen,
+        setEditDialogOpen,
+        fetchTurmaDetalhes,
+      }}
+    >
       {children}
     </TurmaDetalhesContext.Provider>
-  )
+  );
 }
 
 export function useTurmaDetalhes() {
-  const context = useContext(TurmaDetalhesContext)
+  const context = useContext(TurmaDetalhesContext);
   if (context === undefined) {
-    throw new Error("useTurmaDetalhes must be used within a TurmaDetalhesProvider")
+    throw new Error(
+      'useTurmaDetalhes must be used within a TurmaDetalhesProvider'
+    );
   }
-  return context
+  return context;
 }

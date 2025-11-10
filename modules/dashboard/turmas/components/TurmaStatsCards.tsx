@@ -1,13 +1,13 @@
-"use client"
+'use client';
 
-import { Card } from "@/components/ui/card"
-import { Users, ClipboardList } from "lucide-react"
-import { useTurmaDetalhes } from "@/modules/dashboard/turmas/providers/TurmaDetalhesProvider"
+import { Card } from '@/components/ui/card';
+import { Users, ClipboardList } from 'lucide-react';
+import { useTurmaDetalhes } from '@/modules/dashboard/turmas/providers/TurmaDetalhesProvider';
 
 export function TurmaStatsCards() {
-  const { turma } = useTurmaDetalhes()
+  const { turma } = useTurmaDetalhes();
 
-  if (!turma) return null
+  if (!turma) return null;
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -18,7 +18,9 @@ export function TurmaStatsCards() {
           </div>
           <div>
             <p className="text-sm text-gray-600">Total de Alunos</p>
-            <p className="text-2xl font-bold text-gray-900">{turma.total_alunos || 0}</p>
+            <p className="text-2xl font-bold text-gray-900">
+              {turma.total_alunos || 0}
+            </p>
           </div>
         </div>
       </Card>
@@ -29,10 +31,12 @@ export function TurmaStatsCards() {
           </div>
           <div>
             <p className="text-sm text-gray-600">Critérios Configurados</p>
-            <p className="text-2xl font-bold text-gray-900">{turma.total_criterios || 0}</p>
+            <p className="text-2xl font-bold text-gray-900">
+              {turma.total_criterios || 0}
+            </p>
           </div>
         </div>
       </Card>
     </div>
-  )
+  );
 }

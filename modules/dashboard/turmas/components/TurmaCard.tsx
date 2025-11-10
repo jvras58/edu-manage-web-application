@@ -1,16 +1,16 @@
-"use client"
+'use client';
 
-import { Card } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Users, ClipboardList, Pencil, Trash2 } from "lucide-react"
-import Link from "next/link"
-import { Turma } from "@/modules/dashboard/turmas/types/turmas.types"
+import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Users, ClipboardList, Pencil, Trash2 } from 'lucide-react';
+import Link from 'next/link';
+import { Turma } from '@/modules/dashboard/turmas/types/turmas.types';
 
 interface TurmaCardProps {
-  turma: Turma
-  onEdit: (turma: Turma) => void
-  onDelete: (turma: Turma) => void
+  turma: Turma;
+  onEdit: (turma: Turma) => void;
+  onDelete: (turma: Turma) => void;
 }
 
 export function TurmaCard({ turma, onEdit, onDelete }: TurmaCardProps) {
@@ -36,14 +36,15 @@ export function TurmaCard({ turma, onEdit, onDelete }: TurmaCardProps) {
       </div>
 
       <div className="flex gap-2 pt-2">
-        <Button variant="outline" size="sm" className="flex-1 bg-transparent" asChild>
-          <Link href={`/turmas/${turma.id}`}>Ver Detalhes</Link>
-        </Button>
         <Button
           variant="outline"
-          size="icon"
-          onClick={() => onEdit(turma)}
+          size="sm"
+          className="flex-1 bg-transparent"
+          asChild
         >
+          <Link href={`/turmas/${turma.id}`}>Ver Detalhes</Link>
+        </Button>
+        <Button variant="outline" size="icon" onClick={() => onEdit(turma)}>
           <Pencil className="h-4 w-4" />
         </Button>
         <Button variant="outline" size="icon" onClick={() => onDelete(turma)}>
@@ -51,5 +52,5 @@ export function TurmaCard({ turma, onEdit, onDelete }: TurmaCardProps) {
         </Button>
       </div>
     </Card>
-  )
+  );
 }

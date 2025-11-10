@@ -1,49 +1,53 @@
-"use client"
+'use client';
 
-import { Card } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { Pencil, Trash2 } from "lucide-react"
-import { Aluno } from "@/modules/dashboard/alunos/schemas/aluno.schema"
+import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Pencil, Trash2 } from 'lucide-react';
+import { Aluno } from '@/modules/dashboard/alunos/schemas/aluno.schema';
 
 interface AlunoCardProps {
-  aluno: Aluno
-  onEdit: (aluno: Aluno) => void
-  onDelete: (aluno: Aluno) => void
+  aluno: Aluno;
+  onEdit: (aluno: Aluno) => void;
+  onDelete: (aluno: Aluno) => void;
 }
 
 export function AlunoCard({ aluno, onEdit, onDelete }: AlunoCardProps) {
   const getStatusBadge = (status: string) => {
     const variants = {
-      ativo: "success",
-      inativo: "warning",
-      trancado: "warning",
-    } as const
+      ativo: 'success',
+      inativo: 'warning',
+      trancado: 'warning',
+    } as const;
 
-    return variants[status as keyof typeof variants] || "default"
-  }
+    return variants[status as keyof typeof variants] || 'default';
+  };
 
   const getInitials = (name: string) => {
     return name
-      .split(" ")
+      .split(' ')
       .map((n) => n[0])
-      .join("")
+      .join('')
       .toUpperCase()
-      .slice(0, 2)
-  }
+      .slice(0, 2);
+  };
 
   return (
     <Card className="p-6 space-y-4">
       <div className="flex items-start gap-3">
         <Avatar className="h-12 w-12">
           <AvatarImage src={aluno.foto_url || undefined} />
-          <AvatarFallback className="bg-blue-100 text-blue-700">{getInitials(aluno.nome)}</AvatarFallback>
+          <AvatarFallback className="bg-blue-100 text-blue-700">
+            {getInitials(aluno.nome)}
+          </AvatarFallback>
         </Avatar>
         <div className="flex-1 min-w-0">
           <h3 className="font-semibold text-gray-900 truncate">{aluno.nome}</h3>
           <p className="text-sm text-gray-600">{aluno.matricula}</p>
-          {aluno.email && <p className="text-sm text-gray-600 truncate">{aluno.email}</p>}
+          {aluno.email && (
+            <p className="text-sm text-gray-600 truncate">{aluno.email}</p>
+          )}
         </div>
         <Badge variant={getStatusBadge(aluno.status)}>{aluno.status}</Badge>
       </div>
@@ -57,7 +61,6 @@ export function AlunoCard({ aluno, onEdit, onDelete }: AlunoCardProps) {
           ))}
         </div>
       )}
-
 
       <div className="flex gap-2 pt-2">
         <Button
@@ -74,5 +77,5 @@ export function AlunoCard({ aluno, onEdit, onDelete }: AlunoCardProps) {
         </Button>
       </div>
     </Card>
-  )
+  );
 }

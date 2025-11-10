@@ -1,122 +1,131 @@
-"use client"
+'use client';
 
-import type React from "react"
+import type React from 'react';
 
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Menu, Bell, Check, X } from "lucide-react"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { cn } from "@/lib/utils"
-import Link from "next/link"
+import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Menu, Bell, Check, X } from 'lucide-react';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
+import Link from 'next/link';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu"
+} from '@/components/ui/dropdown-menu';
 
 interface NavbarProps {
-  onMenuClick: () => void
+  onMenuClick: () => void;
 }
 
 interface Notificacao {
-  id: string
-  tipo: "info" | "sucesso" | "alerta" | "erro"
-  mensagem: string
-  lida: boolean
-  created_at: string
+  id: string;
+  tipo: 'info' | 'sucesso' | 'alerta' | 'erro';
+  mensagem: string;
+  lida: boolean;
+  created_at: string;
 }
 
 export function Navbar({ onMenuClick }: NavbarProps) {
-  const [user, setUser] = useState<{ nome: string; email: string } | null>(null)
-  const [notificacoes, setNotificacoes] = useState<Notificacao[]>([])
-  const [loading, setLoading] = useState(false)
+  const [user, setUser] = useState<{ nome: string; email: string } | null>(
+    null
+  );
+  const [notificacoes, setNotificacoes] = useState<Notificacao[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch("/api/auth/me")
+        const response = await fetch('/api/auth/me');
         if (response.ok) {
-          const data = await response.json()
-          setUser(data.user)
+          const data = await response.json();
+          setUser(data.user);
         }
       } catch (error) {
-        console.error("  Failed to fetch user:", error)
+        console.error('  Failed to fetch user:', error);
       }
-    }
+    };
 
-    fetchUser()
-    fetchNotificacoes()
+    fetchUser();
+    fetchNotificacoes();
 
-    const interval = setInterval(fetchNotificacoes, 30000)
-    return () => clearInterval(interval)
-  }, [])
+    const interval = setInterval(fetchNotificacoes, 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   const fetchNotificacoes = async () => {
     try {
-      const response = await fetch("/api/notificacoes?limit=5")
+      const response = await fetch('/api/notificacoes?limit=5');
       if (response.ok) {
-        const data = await response.json()
-        setNotificacoes(data.notificacoes)
+        const data = await response.json();
+        setNotificacoes(data.notificacoes);
       }
     } catch (error) {
-      console.error("  Failed to fetch notifications:", error)
+      console.error('  Failed to fetch notifications:', error);
     }
-  }
+  };
 
   const marcarComoLida = async (id: string, e: React.MouseEvent) => {
-    e.stopPropagation()
-    setLoading(true)
+    e.stopPropagation();
+    setLoading(true);
     try {
       const response = await fetch(`/api/notificacoes/${id}`, {
-        method: "PATCH",
-      })
+        method: 'PATCH',
+      });
 
       if (response.ok) {
-        setNotificacoes((prev) => prev.map((n) => (n.id === id ? { ...n, lida: true } : n)))
+        setNotificacoes((prev) =>
+          prev.map((n) => (n.id === id ? { ...n, lida: true } : n))
+        );
       }
     } catch (error) {
-      console.error("  Failed to mark as read:", error)
+      console.error('  Failed to mark as read:', error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const deletarNotificacao = async (id: string, e: React.MouseEvent) => {
-    e.stopPropagation()
-    setLoading(true)
+    e.stopPropagation();
+    setLoading(true);
     try {
       const response = await fetch(`/api/notificacoes/${id}`, {
-        method: "DELETE",
-      })
+        method: 'DELETE',
+      });
 
       if (response.ok) {
-        setNotificacoes((prev) => prev.filter((n) => n.id !== id))
+        setNotificacoes((prev) => prev.filter((n) => n.id !== id));
       }
     } catch (error) {
-      console.error("  Failed to delete notification:", error)
+      console.error('  Failed to delete notification:', error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const getInitials = (name: string) => {
     return name
-      .split(" ")
+      .split(' ')
       .map((n) => n[0])
-      .join("")
+      .join('')
       .toUpperCase()
-      .slice(0, 2)
-  }
+      .slice(0, 2);
+  };
 
-  const naoLidas = notificacoes.filter((n) => !n.lida).length
+  const naoLidas = notificacoes.filter((n) => !n.lida).length;
 
   return (
     <header className="sticky top-0 z-30 bg-white border-b border-gray-200">
       <div className="flex items-center justify-between px-4 py-3 lg:px-6">
-        <Button variant="ghost" size="icon" onClick={onMenuClick} className="lg:hidden">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={onMenuClick}
+          className="lg:hidden"
+        >
           <Menu className="h-6 w-6" />
         </Button>
 
@@ -131,7 +140,7 @@ export function Navbar({ onMenuClick }: NavbarProps) {
                 <Bell className="h-5 w-5" />
                 {naoLidas > 0 && (
                   <span className="absolute -top-1 -right-1 h-5 w-5 bg-red-500 rounded-full flex items-center justify-center text-white text-xs font-medium">
-                    {naoLidas > 9 ? "9+" : naoLidas}
+                    {naoLidas > 9 ? '9+' : naoLidas}
                   </span>
                 )}
               </Button>
@@ -141,33 +150,40 @@ export function Navbar({ onMenuClick }: NavbarProps) {
                 <h3 className="font-semibold text-sm">Notificações</h3>
                 {naoLidas > 0 && (
                   <Badge variant="info" className="h-5 px-2 text-xs">
-                    {naoLidas} nova{naoLidas > 1 ? "s" : ""}
+                    {naoLidas} nova{naoLidas > 1 ? 's' : ''}
                   </Badge>
                 )}
               </div>
 
               {notificacoes.length === 0 ? (
-                <div className="px-4 py-8 text-center text-sm text-gray-500">Nenhuma notificação</div>
+                <div className="px-4 py-8 text-center text-sm text-gray-500">
+                  Nenhuma notificação
+                </div>
               ) : (
                 <div className="max-h-[400px] overflow-y-auto">
                   {notificacoes.map((notificacao) => (
                     <div
                       key={notificacao.id}
                       className={cn(
-                        "px-4 py-3 border-b hover:bg-gray-50 transition-colors",
-                        !notificacao.lida && "bg-blue-50",
+                        'px-4 py-3 border-b hover:bg-gray-50 transition-colors',
+                        !notificacao.lida && 'bg-blue-50'
                       )}
                     >
                       <div className="flex items-start gap-3">
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm text-gray-900 line-clamp-2">{notificacao.mensagem}</p>
+                          <p className="text-sm text-gray-900 line-clamp-2">
+                            {notificacao.mensagem}
+                          </p>
                           <p className="text-xs text-gray-500 mt-1">
-                            {new Date(notificacao.created_at).toLocaleString("pt-BR", {
-                              day: "2-digit",
-                              month: "short",
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}
+                            {new Date(notificacao.created_at).toLocaleString(
+                              'pt-BR',
+                              {
+                                day: '2-digit',
+                                month: 'short',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              }
+                            )}
                           </p>
                         </div>
                         <div className="flex items-center gap-1">
@@ -186,7 +202,9 @@ export function Navbar({ onMenuClick }: NavbarProps) {
                             variant="ghost"
                             size="icon"
                             className="h-8 w-8"
-                            onClick={(e) => deletarNotificacao(notificacao.id, e)}
+                            onClick={(e) =>
+                              deletarNotificacao(notificacao.id, e)
+                            }
                             disabled={loading}
                           >
                             <X className="h-4 w-4 text-red-600" />
@@ -200,7 +218,10 @@ export function Navbar({ onMenuClick }: NavbarProps) {
 
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild className="cursor-pointer">
-                <Link href="/notificacoes" className="w-full text-center py-2 text-sm font-medium text-blue-600">
+                <Link
+                  href="/notificacoes"
+                  className="w-full text-center py-2 text-sm font-medium text-blue-600"
+                >
                   Ver todas as notificações
                 </Link>
               </DropdownMenuItem>
@@ -210,7 +231,9 @@ export function Navbar({ onMenuClick }: NavbarProps) {
           {user && (
             <div className="flex items-center gap-3">
               <Avatar className="h-9 w-9 bg-blue-600">
-                <AvatarFallback className="bg-blue-600 text-white text-sm">{getInitials(user.nome)}</AvatarFallback>
+                <AvatarFallback className="bg-blue-600 text-white text-sm">
+                  {getInitials(user.nome)}
+                </AvatarFallback>
               </Avatar>
               <div className="hidden md:block">
                 <p className="text-sm font-medium text-gray-900">{user.nome}</p>
@@ -221,5 +244,5 @@ export function Navbar({ onMenuClick }: NavbarProps) {
         </div>
       </div>
     </header>
-  )
+  );
 }

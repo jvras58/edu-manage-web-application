@@ -1,10 +1,31 @@
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Search } from 'lucide-react';
+import { Turma } from '@/modules/dashboard/alunos/schemas/aluno.schema';
 
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Search } from "lucide-react"
-import { Turma } from "@/modules/dashboard/alunos/schemas/aluno.schema"
-
-export function AlunosFilters({ search, onSearchChange, statusFilter, onStatusFilterChange, turmaFilter, onTurmaFilterChange, turmas }: { search: string; onSearchChange: (value: string) => void; statusFilter: string; onStatusFilterChange: (value: string) => void; turmaFilter: string; onTurmaFilterChange: (value: string) => void; turmas: Turma[] }) {
+export function AlunosFilters({
+  search,
+  onSearchChange,
+  statusFilter,
+  onStatusFilterChange,
+  turmaFilter,
+  onTurmaFilterChange,
+  turmas,
+}: {
+  search: string;
+  onSearchChange: (value: string) => void;
+  statusFilter: string;
+  onStatusFilterChange: (value: string) => void;
+  turmaFilter: string;
+  onTurmaFilterChange: (value: string) => void;
+  turmas: Turma[];
+}) {
   return (
     <div className="flex flex-col sm:flex-row gap-3">
       <div className="relative flex-1">
@@ -41,5 +62,5 @@ export function AlunosFilters({ search, onSearchChange, statusFilter, onStatusFi
         </SelectContent>
       </Select>
     </div>
-  )
+  );
 }

@@ -1,11 +1,11 @@
-"use client"
+'use client';
 
-import { Input } from "@/components/ui/input"
-import { Search } from "lucide-react"
+import { Input } from '@/components/ui/input';
+import { Search } from 'lucide-react';
 
 interface TurmasSearchProps {
-  search: string
-  onSearchChange: (value: string) => void
+  search: string;
+  onSearchChange: (value: string) => void;
 }
 
 export function TurmasSearch({ search, onSearchChange }: TurmasSearchProps) {
@@ -19,5 +19,5 @@ export function TurmasSearch({ search, onSearchChange }: TurmasSearchProps) {
         className="pl-10"
       />
     </div>
-  )
+  );
 }

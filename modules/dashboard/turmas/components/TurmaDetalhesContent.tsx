@@ -1,13 +1,13 @@
-"use client"
+'use client';
 
-import { useTurmaDetalhes } from "@/modules/dashboard/turmas/providers/TurmaDetalhesProvider"
-import { TurmaDetalhesHeader } from "@/modules/dashboard/turmas/components/TurmaDetalhesHeader"
-import { TurmaStatsCards } from "@/modules/dashboard/turmas/components/TurmaStatsCards"
-import { TurmaAlunosList } from "@/modules/dashboard/turmas/components/TurmaAlunosList"
-import { TurmaCriteriosList } from "@/modules/dashboard/turmas/components/TurmaCriteriosList"
+import { useTurmaDetalhes } from '@/modules/dashboard/turmas/providers/TurmaDetalhesProvider';
+import { TurmaDetalhesHeader } from '@/modules/dashboard/turmas/components/TurmaDetalhesHeader';
+import { TurmaStatsCards } from '@/modules/dashboard/turmas/components/TurmaStatsCards';
+import { TurmaAlunosList } from '@/modules/dashboard/turmas/components/TurmaAlunosList';
+import { TurmaCriteriosList } from '@/modules/dashboard/turmas/components/TurmaCriteriosList';
 
 export function TurmaDetalhesContent() {
-  const { loading } = useTurmaDetalhes()
+  const { loading } = useTurmaDetalhes();
 
   if (loading) {
     return (
@@ -18,7 +18,7 @@ export function TurmaDetalhesContent() {
           <div className="h-64 bg-gray-200 rounded"></div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -30,5 +30,5 @@ export function TurmaDetalhesContent() {
         <TurmaCriteriosList />
       </div>
     </div>
-  )
+  );
 }

@@ -1,18 +1,18 @@
-import { NextResponse } from "next/server"
-import { getCurrentUser } from "@/lib/auth"
-import { prisma } from "@/lib/db"
+import { NextResponse } from 'next/server';
+import { getCurrentUser } from '@/lib/auth';
+import { prisma } from '@/lib/db';
 
 export async function GET() {
   try {
-    const user = await getCurrentUser()
+    const user = await getCurrentUser();
 
     if (!user) {
-      return NextResponse.json({ error: "Não autenticado" }, { status: 401 })
+      return NextResponse.json({ error: 'Não autenticado' }, { status: 401 });
     }
 
     const totalTurmas = await prisma.professorTurma.count({
       where: { professor_id: user.userId },
-    })
+    });
 
     const totalAlunos = await prisma.alunoTurma.count({
       where: {
@@ -24,7 +24,7 @@ export async function GET() {
           },
         },
       },
-    })
+    });
 
     const totalCriterios = await prisma.criterioAvaliacao.count({
       where: {
@@ -36,17 +36,17 @@ export async function GET() {
           },
         },
       },
-    })
+    });
 
     const notificacoesNaoLidas = await prisma.notificacao.count({
       where: {
         usuario_id: user.userId,
         lida: false,
       },
-    })
+    });
 
     const alunosPorStatus = await prisma.aluno.groupBy({
-      by: ["status"],
+      by: ['status'],
       _count: {
         id: true,
       },
@@ -63,7 +63,7 @@ export async function GET() {
           },
         },
       },
-    })
+    });
 
     const turmasRecentes = await prisma.turma.findMany({
       where: {
@@ -81,10 +81,10 @@ export async function GET() {
         },
       },
       orderBy: {
-        created_at: "desc",
+        created_at: 'desc',
       },
       take: 5,
-    })
+    });
 
     return NextResponse.json({
       stats: {
@@ -105,9 +105,12 @@ export async function GET() {
         total_alunos: turma.aluno_turmas.length,
         created_at: turma.created_at,
       })),
-    })
+    });
   } catch (error) {
-    console.error("  Dashboard stats error:", error)
-    return NextResponse.json({ error: "Erro ao obter estatísticas" }, { status: 500 })
+    console.error('  Dashboard stats error:', error);
+    return NextResponse.json(
+      { error: 'Erro ao obter estatísticas' },
+      { status: 500 }
+    );
   }
 }

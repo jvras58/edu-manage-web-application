@@ -1,22 +1,22 @@
-import { create } from 'zustand'
-import { persist, createJSONStorage } from 'zustand/middleware'
-import type { UserPayload } from '@/lib/auth'
+import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import type { UserPayload } from '@/lib/auth';
 
-export type User = UserPayload
+export type User = UserPayload;
 
 interface AuthState {
-  user: User | null
-  isAuthenticated: boolean
-  isLoading: boolean
+  user: User | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
 }
 
 interface AuthActions {
-  setUser: (user: User | null) => void
-  logout: () => void
-  setLoading: (loading: boolean) => void
+  setUser: (user: User | null) => void;
+  logout: () => void;
+  setLoading: (loading: boolean) => void;
 }
 
-type AuthStore = AuthState & AuthActions
+type AuthStore = AuthState & AuthActions;
 
 export const useAuthStore = create<AuthStore>()(
   persist(
@@ -53,9 +53,9 @@ export const useAuthStore = create<AuthStore>()(
       }),
       onRehydrateStorage: () => (state) => {
         if (state) {
-          state.setLoading(false)
+          state.setLoading(false);
         }
       },
     }
   )
-)
+);
