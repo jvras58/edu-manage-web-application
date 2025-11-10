@@ -48,7 +48,6 @@ export function AlunoCard({ aluno, onEdit, onDelete }: AlunoCardProps) {
         <Badge variant={getStatusBadge(aluno.status)}>{aluno.status}</Badge>
       </div>
 
-      {/* Turmas */}
       {aluno.turmas && aluno.turmas.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {aluno.turmas.map((turma, idx) => (
@@ -59,7 +58,7 @@ export function AlunoCard({ aluno, onEdit, onDelete }: AlunoCardProps) {
         </div>
       )}
 
-      {/* Actions */}
+
       <div className="flex gap-2 pt-2">
         <Button
           variant="outline"

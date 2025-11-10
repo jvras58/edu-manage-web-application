@@ -45,16 +45,14 @@ export function CriteriosTurmaDashboard({ turmaId }: CriteriosTurmaDashboardProp
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+        
       <CriteriosTurmaHeader />
 
-      {/* Peso Total */}
+
       <CriteriosPesoCard />
 
-      {/* Lista de Critérios */}
       <CriteriosTurmaList />
 
-      {/* Dialog Criar/Editar */}
       <CriterioDialog
         open={dialogOpen}
         onOpenChange={setDialogOpen}
@@ -69,7 +67,7 @@ export function CriteriosTurmaDashboard({ turmaId }: CriteriosTurmaDashboardProp
         }}
       />
 
-      {/* Dialog Confirmar Exclusão */}
+
       <AlertDialog open={!!deletingCriterio} onOpenChange={() => setDeletingCriterio(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>

@@ -24,7 +24,6 @@ export function TurmaCard({ turma, onEdit, onDelete }: TurmaCardProps) {
         <p className="text-gray-600">{turma.disciplina}</p>
       </div>
 
-      {/* Stats */}
       <div className="flex gap-4 pt-2 border-t">
         <div className="flex items-center gap-2 text-sm text-gray-600">
           <Users className="h-4 w-4" />
@@ -36,7 +35,6 @@ export function TurmaCard({ turma, onEdit, onDelete }: TurmaCardProps) {
         </div>
       </div>
 
-      {/* Actions */}
       <div className="flex gap-2 pt-2">
         <Button variant="outline" size="sm" className="flex-1 bg-transparent" asChild>
           <Link href={`/turmas/${turma.id}`}>Ver Detalhes</Link>

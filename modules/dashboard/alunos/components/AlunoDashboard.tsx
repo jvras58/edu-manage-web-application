@@ -46,14 +46,12 @@ export function AlunosDashboard() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <AlunosToolbar
         onNovoAluno={handleNovoAluno}
         statusFilter={statusFilter}
         turmaFilter={turmaFilter}
       />
 
-      {/* Filters */}
       <AlunosFilters
         search={search}
         onSearchChange={setSearch}
@@ -64,7 +62,6 @@ export function AlunosDashboard() {
         turmas={turmas}
       />
 
-      {/* Lista de Alunos */}
       <AlunosList
         alunos={filteredAlunos}
         onNovoAluno={handleNovoAluno}
@@ -72,7 +69,6 @@ export function AlunosDashboard() {
         onDelete={handleDeleteClick}
       />
 
-      {/* Dialog Criar/Editar */}
       <AlunoDialog
         open={dialogOpen}
         onOpenChange={setDialogOpen}
@@ -84,7 +80,6 @@ export function AlunosDashboard() {
         }}
       />
 
-      {/* Dialog Confirmar Exclusão */}
       <AlertDialog open={!!deletingAluno} onOpenChange={() => setDeletingAluno(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
