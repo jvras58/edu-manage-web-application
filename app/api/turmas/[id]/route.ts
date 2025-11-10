@@ -45,7 +45,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       criterios: turma.criterios_avaliacao,
     })
   } catch (error) {
-    console.error("[v0] Get turma error:", error)
+    console.error("  Get turma error:", error)
     return NextResponse.json({ error: "Erro ao obter turma" }, { status: 500 })
   }
 }
@@ -104,7 +104,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
     return NextResponse.json({ turma })
   } catch (error) {
-    console.error("[v0] Update turma error:", error)
+    console.error("  Update turma error:", error)
     return NextResponse.json({ error: "Erro ao atualizar turma" }, { status: 500 })
   }
 }
@@ -151,7 +151,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error("[v0] Delete turma error:", error)
+    console.error("  Delete turma error:", error)
     return NextResponse.json({ error: "Erro ao deletar turma" }, { status: 500 })
   }
 }

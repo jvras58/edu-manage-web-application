@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ turmas: turmasFormatted })
   } catch (error) {
-    console.error("[v0] Get turmas error:", error)
+    console.error("  Get turmas error:", error)
     return NextResponse.json({ error: "Erro ao obter turmas" }, { status: 500 })
   }
 }
@@ -102,7 +102,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ turma })
   } catch (error) {
-    console.error("[v0] Create turma error:", error)
+    console.error("  Create turma error:", error)
     return NextResponse.json({ error: "Erro ao criar turma" }, { status: 500 })
   }
 }

@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
       offset,
     })
   } catch (error) {
-    console.error("[v0] Get notifications error:", error)
+    console.error("  Get notifications error:", error)
     return NextResponse.json({ error: "Erro ao obter notificações" }, { status: 500 })
   }
 }
@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ notificacao })
   } catch (error) {
-    console.error("[v0] Create notification error:", error)
+    console.error("  Create notification error:", error)
     return NextResponse.json({ error: "Erro ao criar notificação" }, { status: 500 })
   }
 }

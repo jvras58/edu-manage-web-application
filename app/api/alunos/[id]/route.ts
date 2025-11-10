@@ -32,7 +32,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       turmas: aluno.aluno_turmas.map((at) => at.turma),
     })
   } catch (error) {
-    console.error("[v0] Get aluno error:", error)
+    console.error("  Get aluno error:", error)
     return NextResponse.json({ error: "Erro ao obter aluno" }, { status: 500 })
   }
 }
@@ -122,7 +122,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
     return NextResponse.json({ aluno })
   } catch (error) {
-    console.error("[v0] Update aluno error:", error)
+    console.error("  Update aluno error:", error)
     return NextResponse.json({ error: "Erro ao atualizar aluno" }, { status: 500 })
   }
 }
@@ -162,7 +162,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error("[v0] Delete aluno error:", error)
+    console.error("  Delete aluno error:", error)
     return NextResponse.json({ error: "Erro ao deletar aluno" }, { status: 500 })
   }
 }

@@ -43,7 +43,7 @@ export function Navbar({ onMenuClick }: NavbarProps) {
           setUser(data.user)
         }
       } catch (error) {
-        console.error("[v0] Failed to fetch user:", error)
+        console.error("  Failed to fetch user:", error)
       }
     }
 
@@ -63,7 +63,7 @@ export function Navbar({ onMenuClick }: NavbarProps) {
         setNotificacoes(data.notificacoes)
       }
     } catch (error) {
-      console.error("[v0] Failed to fetch notifications:", error)
+      console.error("  Failed to fetch notifications:", error)
     }
   }
 
@@ -79,7 +79,7 @@ export function Navbar({ onMenuClick }: NavbarProps) {
         setNotificacoes((prev) => prev.map((n) => (n.id === id ? { ...n, lida: true } : n)))
       }
     } catch (error) {
-      console.error("[v0] Failed to mark as read:", error)
+      console.error("  Failed to mark as read:", error)
     } finally {
       setLoading(false)
     }
@@ -97,7 +97,7 @@ export function Navbar({ onMenuClick }: NavbarProps) {
         setNotificacoes((prev) => prev.filter((n) => n.id !== id))
       }
     } catch (error) {
-      console.error("[v0] Failed to delete notification:", error)
+      console.error("  Failed to delete notification:", error)
     } finally {
       setLoading(false)
     }

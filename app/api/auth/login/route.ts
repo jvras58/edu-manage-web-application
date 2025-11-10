@@ -9,13 +9,13 @@ export async function POST(request: NextRequest) {
     try {
       body = await request.json()
     } catch (parseError) {
-      console.error("[v0] JSON parse error:", parseError)
+      console.error("  JSON parse error:", parseError)
       return NextResponse.json({ error: "Dados inválidos" }, { status: 400 })
     }
 
     const { email, password } = body
 
-    console.log("[v0] Login attempt for email:", email)
+    console.log("  Login attempt for email:", email)
 
     // Validação básica
     if (!email || !password) {
@@ -26,17 +26,17 @@ export async function POST(request: NextRequest) {
       where: { email },
     })
 
-    console.log("[v0] Found user:", usuario)
+    console.log("  Found user:", usuario)
 
     if (!usuario) {
       return NextResponse.json({ error: "Credenciais inválidas" }, { status: 401 })
     }
 
-    console.log("[v0] Verifying password...")
+    console.log("  Verifying password...")
     // Verifica a senha
     const senhaValida = await comparePassword(password, usuario.senha_hash)
 
-    console.log("[v0] Password valid:", senhaValida)
+    console.log("  Password valid:", senhaValida)
 
     if (!senhaValida) {
       return NextResponse.json({ error: "Credenciais inválidas" }, { status: 401 })
@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
     // Define cookie
     await setTokenCookie(token)
 
-    console.log("[v0] Login successful for:", usuario.email)
+    console.log("  Login successful for:", usuario.email)
 
     return NextResponse.json(
       {
@@ -79,9 +79,9 @@ export async function POST(request: NextRequest) {
       },
     )
   } catch (error: any) {
-    console.error("[v0] Login error:", error)
-    console.error("[v0] Error message:", error?.message)
-    console.error("[v0] Error stack:", error?.stack)
+    console.error("  Login error:", error)
+    console.error("  Error message:", error?.message)
+    console.error("  Error stack:", error?.stack)
     return NextResponse.json({ error: "Erro ao fazer login" }, { status: 500 })
   }
 }

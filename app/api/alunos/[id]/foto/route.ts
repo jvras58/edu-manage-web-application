@@ -30,7 +30,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
     return NextResponse.json({ url: blob.url })
   } catch (error) {
-    console.error("[v0] Upload foto error:", error)
+    console.error("  Upload foto error:", error)
     return NextResponse.json({ error: "Erro ao fazer upload da foto" }, { status: 500 })
   }
 }
