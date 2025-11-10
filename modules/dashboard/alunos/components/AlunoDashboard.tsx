@@ -15,7 +15,7 @@ import {
 import { AlunosHeader } from "./AlunosHeader"
 import { AlunosFilters } from "./AlunosFilters"
 import { AlunosList } from "./AlunosList"
-import { useAlunos } from "../providers/alunos-provider"
+import { useAlunos } from "../providers/AlunosProvider"
 
 export function AlunosDashboard() {
   const {

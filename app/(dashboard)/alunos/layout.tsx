@@ -1,5 +1,5 @@
 
-import { AlunosProvider } from "@/modules/dashboard/alunos/providers/alunos-provider"
+import { AlunosProvider } from "@/modules/dashboard/alunos/providers/AlunosProvider"
 import type React from "react"
 
 
