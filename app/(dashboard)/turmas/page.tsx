@@ -158,11 +158,11 @@ export default function TurmasPage() {
               <div className="flex gap-4 pt-2 border-t">
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                   <Users className="h-4 w-4" />
-                  <span>{Number.parseInt(turma.total_alunos)} alunos</span>
+                  <span>{(turma.total_alunos)} alunos</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                   <ClipboardList className="h-4 w-4" />
-                  <span>{Number.parseInt(turma.total_criterios)} critérios</span>
+                  <span>{(turma.total_criterios)} critérios</span>
                 </div>
               </div>
 
