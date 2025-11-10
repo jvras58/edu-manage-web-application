@@ -75,7 +75,7 @@ export default function CriteriosPage() {
 
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <ClipboardList className="h-4 w-4" />
-                <span>{Number.parseInt(turma.total_criterios)} critérios configurados</span>
+                <span>{turma.total_criterios} critérios configurados</span>
               </div>
 
               <Button variant="outline" className="w-full bg-transparent" asChild>
