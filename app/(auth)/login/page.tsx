@@ -1,6 +1,5 @@
 import { GraduationCap } from "lucide-react"
 import { LoginForm } from "@/modules/auth/components/auth-components"
-import Link from "next/link"
 
 export default function LoginPage() {
   return (
