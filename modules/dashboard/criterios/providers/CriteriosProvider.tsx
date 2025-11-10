@@ -2,15 +2,8 @@
 
 import { createContext, useContext, useEffect, useState, ReactNode } from "react"
 import { useToast } from "@/hooks/use-toast"
+import { Turma } from "../types/criterios.schema"
 
-
-interface Turma {
-  id: string
-  nome: string
-  disciplina: string
-  ano_letivo: string
-  total_criterios: number
-}
 
 interface CriteriosContextType {
   loading: boolean
