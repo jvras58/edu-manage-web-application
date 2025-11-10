@@ -60,3 +60,5 @@ O Prisma gerencia o banco: migrações aplicam mudanças no schema, e o seed pop
   - Abrir Prisma Studio (interface visual para o banco): `pnpm prisma studio` (abre em `http://localhost:5555`).
 
 Se o `pnpm run dev` ainda falhar após esses passos, verifique logs de erro (provavelmente relacionados ao banco) e certifique-se de que o Neon está online. Se precisar de ajuda com erros específicos, compartilhe os logs!
+
+npx tsc --noEmit --project tsconfig.json
