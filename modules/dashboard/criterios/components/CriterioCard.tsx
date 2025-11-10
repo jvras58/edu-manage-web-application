@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Pencil, Trash2 } from "lucide-react"
-import { Criterio } from "../types/criterios.schema"
+import { Criterio } from "../types/criterios.types"
 
 interface CriterioCardProps {
   criterio: Criterio
