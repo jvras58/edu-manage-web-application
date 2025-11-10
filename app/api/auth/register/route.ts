@@ -14,7 +14,6 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { nome, email, password, role } = body
 
-    // Validação
     if (!nome || !email || !password || !role) {
       return NextResponse.json({ error: "Todos os campos são obrigatórios" }, { status: 400 })
     }
@@ -31,7 +30,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Email já cadastrado" }, { status: 409 })
     }
 
-    // Hash da senha
     const senhaHash = await hashPassword(password)
 
     const newUser = await prisma.usuario.create({
@@ -61,7 +59,7 @@ export async function POST(request: NextRequest) {
       },
     })
   } catch (error) {
-    console.error("  Register error:", error)
+    console.error("Register error:", error)
     return NextResponse.json({ error: "Erro ao criar usuário" }, { status: 500 })
   }
 }

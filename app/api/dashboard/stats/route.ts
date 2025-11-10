@@ -45,7 +45,6 @@ export async function GET() {
       },
     })
 
-    // Alunos por status
     const alunosPorStatus = await prisma.aluno.groupBy({
       by: ["status"],
       _count: {
@@ -66,7 +65,6 @@ export async function GET() {
       },
     })
 
-    // Turmas mais recentes
     const turmasRecentes = await prisma.turma.findMany({
       where: {
         professor_turmas: {

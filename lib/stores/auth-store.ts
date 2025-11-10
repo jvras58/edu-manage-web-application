@@ -21,12 +21,10 @@ type AuthStore = AuthState & AuthActions
 export const useAuthStore = create<AuthStore>()(
   persist(
     (set) => ({
-      // State
       user: null,
       isAuthenticated: false,
       isLoading: true,
 
-      // Actions
       setUser: (user) =>
         set({
           user,
@@ -49,12 +47,10 @@ export const useAuthStore = create<AuthStore>()(
     {
       name: 'auth-storage',
       storage: createJSONStorage(() => localStorage),
-      // Persist apenas dados essenciais
       partialize: (state) => ({
         user: state.user,
         isAuthenticated: state.isAuthenticated,
       }),
-      // Callback após hidratação
       onRehydrateStorage: () => (state) => {
         if (state) {
           state.setLoading(false)

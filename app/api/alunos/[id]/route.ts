@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server"
 import { getCurrentUser } from "@/lib/auth"
 import { prisma } from "@/lib/db"
 
-export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const user = await getCurrentUser()
 
@@ -49,12 +49,10 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     const body = await request.json()
     const { nome, matricula, email, foto_url, status, turma_ids } = body
 
-    // Validação
     if (!nome || !matricula) {
       return NextResponse.json({ error: "Nome e matrícula são obrigatórios" }, { status: 400 })
     }
 
-    // Verificar se matrícula já existe em outro aluno
     const existingAluno = await prisma.aluno.findFirst({
       where: {
         matricula,
@@ -68,7 +66,6 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: "Matrícula já cadastrada para outro aluno" }, { status: 409 })
     }
 
-    // Atualizar aluno
     const aluno = await prisma.aluno.update({
       where: { id },
       data: {
@@ -80,16 +77,12 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       },
     })
 
-    // Atualizar associações com turmas
     if (turma_ids && Array.isArray(turma_ids)) {
-      // Remover associações antigas
       await prisma.alunoTurma.deleteMany({
         where: { aluno_id: id },
       })
 
-      // Adicionar novas associações
       for (const turmaId of turma_ids) {
-        // Verificar se turma pertence ao professor
         const turmaValida = await prisma.turma.findFirst({
           where: {
             id: turmaId,
@@ -122,12 +115,12 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
     return NextResponse.json({ aluno })
   } catch (error) {
-    console.error("  Update aluno error:", error)
+    console.error("Update aluno error:", error)
     return NextResponse.json({ error: "Erro ao atualizar aluno" }, { status: 500 })
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const user = await getCurrentUser()
 
@@ -137,7 +130,6 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
 
     const { id } = await params
 
-    // Buscar nome do aluno
     const aluno = await prisma.aluno.findUnique({
       where: { id },
     })
@@ -146,12 +138,10 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
       return NextResponse.json({ error: "Aluno não encontrado" }, { status: 404 })
     }
 
-    // Deletar aluno (cascata deleta relacionamentos)
     await prisma.aluno.delete({
       where: { id },
     })
 
-    // Criar notificação
     await prisma.notificacao.create({
       data: {
         usuario_id: user.userId,
@@ -162,7 +152,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error("  Delete aluno error:", error)
+    console.error("Delete aluno error:", error)
     return NextResponse.json({ error: "Erro ao deletar aluno" }, { status: 500 })
   }
 }

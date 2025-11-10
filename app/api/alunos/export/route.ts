@@ -29,7 +29,6 @@ export async function GET(request: NextRequest) {
       },
     })
 
-    // Gera CSV simples
     const headers = ["Nome", "Matrícula", "Email", "Status", "Data de Cadastro"]
     const rows = alunos.map((aluno) => [
       aluno.nome,
@@ -44,7 +43,6 @@ export async function GET(request: NextRequest) {
       csv += row.map((field) => `"${field}"`).join(",") + "\n"
     })
 
-    // Retorna CSV
     return new NextResponse(csv, {
       status: 200,
       headers: {

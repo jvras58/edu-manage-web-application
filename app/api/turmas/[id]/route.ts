@@ -62,12 +62,10 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     const body = await request.json()
     const { nome, disciplina, ano_letivo } = body
 
-    // Validação
     if (!nome || !disciplina || !ano_letivo) {
       return NextResponse.json({ error: "Nome, disciplina e ano letivo são obrigatórios" }, { status: 400 })
     }
 
-    // Verificar se turma pertence ao professor
     const verificacao = await prisma.turma.findFirst({
       where: {
         id,
@@ -83,7 +81,6 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: "Turma não encontrada" }, { status: 404 })
     }
 
-    // Atualizar turma
     const turma = await prisma.turma.update({
       where: { id },
       data: {
@@ -93,7 +90,6 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       },
     })
 
-    // Criar notificação
     await prisma.notificacao.create({
       data: {
         usuario_id: user.userId,
@@ -104,12 +100,12 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
     return NextResponse.json({ turma })
   } catch (error) {
-    console.error("  Update turma error:", error)
+    console.error("Update turma error:", error)
     return NextResponse.json({ error: "Erro ao atualizar turma" }, { status: 500 })
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const user = await getCurrentUser()
 
@@ -119,7 +115,6 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
 
     const { id } = await params
 
-    // Verificar se turma pertence ao professor
     const turma = await prisma.turma.findFirst({
       where: {
         id,
@@ -135,12 +130,10 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
       return NextResponse.json({ error: "Turma não encontrada" }, { status: 404 })
     }
 
-    // Deletar turma (cascata deleta relacionamentos)
     await prisma.turma.delete({
       where: { id },
     })
 
-    // Criar notificação
     await prisma.notificacao.create({
       data: {
         usuario_id: user.userId,
@@ -151,7 +144,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error("  Delete turma error:", error)
+    console.error("Delete turma error:", error)
     return NextResponse.json({ error: "Erro ao deletar turma" }, { status: 500 })
   }
 }

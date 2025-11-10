@@ -88,12 +88,10 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { nome, matricula, email, foto_url, status, turma_ids } = body
 
-    // Validação
     if (!nome || !matricula) {
       return NextResponse.json({ error: "Nome e matrícula são obrigatórios" }, { status: 400 })
     }
 
-    // Verificar se matrícula já existe
     const existingAluno = await prisma.aluno.findUnique({
       where: { matricula },
     })
@@ -102,7 +100,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Matrícula já cadastrada" }, { status: 409 })
     }
 
-    // Criar aluno
     const aluno = await prisma.aluno.create({
       data: {
         nome,
@@ -113,10 +110,8 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    // Associar aluno às turmas
     if (turma_ids && Array.isArray(turma_ids) && turma_ids.length > 0) {
       for (const turmaId of turma_ids) {
-        // Verificar se turma pertence ao professor
         const turmaValida = await prisma.turma.findFirst({
           where: {
             id: turmaId,
@@ -136,7 +131,6 @@ export async function POST(request: NextRequest) {
             },
           })
 
-          // Criar notificação
           await prisma.notificacao.create({
             data: {
               usuario_id: user.userId,
@@ -150,7 +144,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ aluno })
   } catch (error) {
-    console.error("  Create aluno error:", error)
+    console.error("Create aluno error:", error)
     return NextResponse.json({ error: "Erro ao criar aluno" }, { status: 500 })
   }
 }
