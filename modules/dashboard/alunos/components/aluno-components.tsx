@@ -12,11 +12,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import { Aluno, Turma } from "../schemas/aluno.schema"
 import { AlunosHeader } from "./AlunosHeader"
 import { AlunosFilters } from "./AlunosFilters"
 import { AlunosList } from "./AlunosList"
-import { AlunosProvider, useAlunos } from "../providers/alunos-provider"
+import { useAlunos } from "../providers/alunos-provider"
 
 export function AlunosDashboard() {
   const {
