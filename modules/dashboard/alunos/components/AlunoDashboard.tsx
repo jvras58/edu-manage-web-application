@@ -12,7 +12,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import { AlunosHeader } from "./AlunosHeader"
+import { AlunosToolbar } from "./AlunosToolbar"
 import { AlunosFilters } from "./AlunosFilters"
 import { AlunosList } from "./AlunosList"
 import { useAlunos } from "../providers/AlunosProvider"
@@ -47,7 +47,7 @@ export function AlunosDashboard() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <AlunosHeader
+      <AlunosToolbar
         onNovoAluno={handleNovoAluno}
         statusFilter={statusFilter}
         turmaFilter={turmaFilter}
