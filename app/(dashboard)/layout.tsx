@@ -1,17 +1,17 @@
-"use client"
+'use client';
 
-import type React from "react"
+import type React from 'react';
 
-import { useState } from "react"
-import { Sidebar } from "@/components/layout/sidebar"
-import { Navbar } from "@/components/layout/navbar"
+import { useState } from 'react';
+import { Sidebar } from '@/components/layout/sidebar';
+import { Navbar } from '@/components/layout/navbar';
 
 export default function DashboardLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -23,5 +23,5 @@ export default function DashboardLayout({
         <main className="p-4 lg:p-6">{children}</main>
       </div>
     </div>
-  )
+  );
 }

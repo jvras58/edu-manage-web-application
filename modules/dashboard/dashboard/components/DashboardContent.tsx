@@ -1,46 +1,50 @@
-"use client"
+'use client';
 
-import { useEffect, useState } from "react"
-import { LoadingSpinner } from "@/components/ui/loading-spinner"
-import { useToast } from "@/hooks/use-toast"
-import { DashboardStatsCards } from "@/modules/dashboard/dashboard/components/DashboardStatsCards"
-import { DashboardAlunosStatus } from "@/modules/dashboard/dashboard/components/DashboardAlunosStatus"
-import { DashboardTurmasRecentes } from "@/modules/dashboard/dashboard/components/DashboardTurmasRecentes"
-import { DashboardStats, AlunosPorStatus, TurmaRecente } from "@/modules/dashboard/dashboard/types/dashboard.types"
+import { useEffect, useState } from 'react';
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { useToast } from '@/hooks/use-toast';
+import { DashboardStatsCards } from '@/modules/dashboard/dashboard/components/DashboardStatsCards';
+import { DashboardAlunosStatus } from '@/modules/dashboard/dashboard/components/DashboardAlunosStatus';
+import { DashboardTurmasRecentes } from '@/modules/dashboard/dashboard/components/DashboardTurmasRecentes';
+import {
+  DashboardStats,
+  AlunosPorStatus,
+  TurmaRecente,
+} from '@/modules/dashboard/dashboard/types/dashboard.types';
 
 export function DashboardContent() {
-  const { toast } = useToast()
-  const [loading, setLoading] = useState(true)
-  const [stats, setStats] = useState<DashboardStats | null>(null)
-  const [alunosPorStatus, setAlunosPorStatus] = useState<AlunosPorStatus[]>([])
-  const [turmasRecentes, setTurmasRecentes] = useState<TurmaRecente[]>([])
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [alunosPorStatus, setAlunosPorStatus] = useState<AlunosPorStatus[]>([]);
+  const [turmasRecentes, setTurmasRecentes] = useState<TurmaRecente[]>([]);
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await fetch("/api/dashboard/stats")
-        if (!response.ok) throw new Error("Erro ao carregar estatísticas")
+        const response = await fetch('/api/dashboard/stats');
+        if (!response.ok) throw new Error('Erro ao carregar estatísticas');
 
-        const data = await response.json()
-        setStats(data.stats)
-        setAlunosPorStatus(data.alunosPorStatus)
-        setTurmasRecentes(data.turmasRecentes)
+        const data = await response.json();
+        setStats(data.stats);
+        setAlunosPorStatus(data.alunosPorStatus);
+        setTurmasRecentes(data.turmasRecentes);
       } catch (error) {
         toast({
-          title: "Erro ao carregar dashboard",
-          description: "Tente novamente mais tarde",
-          variant: "destructive",
-        })
+          title: 'Erro ao carregar dashboard',
+          description: 'Tente novamente mais tarde',
+          variant: 'destructive',
+        });
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchStats()
-  }, [toast])
+    fetchStats();
+  }, [toast]);
 
   if (loading) {
-    return <LoadingSpinner />
+    return <LoadingSpinner />;
   }
 
   return (
@@ -52,5 +56,5 @@ export function DashboardContent() {
         <DashboardTurmasRecentes turmasRecentes={turmasRecentes} />
       </div>
     </>
-  )
+  );
 }

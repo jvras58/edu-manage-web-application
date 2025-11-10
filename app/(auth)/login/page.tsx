@@ -1,9 +1,9 @@
-import { GraduationCap } from "lucide-react"
-import { LoginForm } from "@/modules/auth/components/auth-components"
-import { Metadata } from "next";
+import { GraduationCap } from 'lucide-react';
+import { LoginForm } from '@/modules/auth/components/auth-components';
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Login - EduManage",
+  title: 'Login - EduManage',
 };
 
 export default function LoginPage() {
@@ -30,10 +30,11 @@ export default function LoginPage() {
               <p className="font-medium">Senha: 123456</p>
             </div>
           </div>
-          <p className="text-center text-sm text-gray-600 mt-6">Sistema de Gestão Educacional</p>
+          <p className="text-center text-sm text-gray-600 mt-6">
+            Sistema de Gestão Educacional
+          </p>
         </div>
-
       </div>
     </div>
-  )
+  );
 }

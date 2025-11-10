@@ -1,26 +1,22 @@
-"use client"
+'use client';
 
-import { EmptyState } from "@/components/ui/empty-state"
-import { ClipboardList } from "lucide-react"
-import { CriterioCard } from "./CriterioCard"
-import { useCriteriosTurma } from "@/modules/dashboard/criterios/providers/CriteriosTurmaProvider"
+import { EmptyState } from '@/components/ui/empty-state';
+import { ClipboardList } from 'lucide-react';
+import { CriterioCard } from './CriterioCard';
+import { useCriteriosTurma } from '@/modules/dashboard/criterios/providers/CriteriosTurmaProvider';
 
 export function CriteriosTurmaList() {
-  const {
-    criterios,
-    setDialogOpen,
-    setEditingCriterio,
-    setDeletingCriterio
-  } = useCriteriosTurma()
+  const { criterios, setDialogOpen, setEditingCriterio, setDeletingCriterio } =
+    useCriteriosTurma();
 
   const handleEdit = (criterio: any) => {
-    setEditingCriterio(criterio)
-    setDialogOpen(true)
-  }
+    setEditingCriterio(criterio);
+    setDialogOpen(true);
+  };
 
   const handleDelete = (criterio: any) => {
-    setDeletingCriterio(criterio)
-  }
+    setDeletingCriterio(criterio);
+  };
 
   if (criterios.length === 0) {
     return (
@@ -29,11 +25,11 @@ export function CriteriosTurmaList() {
         title="Nenhum critério configurado"
         description="Adicione critérios de avaliação para esta turma"
         action={{
-          label: "Adicionar Critério",
+          label: 'Adicionar Critério',
           onClick: () => setDialogOpen(true),
         }}
       />
-    )
+    );
   }
 
   return (
@@ -47,5 +43,5 @@ export function CriteriosTurmaList() {
         />
       ))}
     </div>
-  )
+  );
 }

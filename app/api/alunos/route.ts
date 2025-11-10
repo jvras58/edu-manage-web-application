@@ -1,19 +1,19 @@
-import { type NextRequest, NextResponse } from "next/server"
-import { getCurrentUser } from "@/lib/auth"
-import { prisma } from "@/lib/db"
+import { type NextRequest, NextResponse } from 'next/server';
+import { getCurrentUser } from '@/lib/auth';
+import { prisma } from '@/lib/db';
 
 export async function GET(request: NextRequest) {
   try {
-    const user = await getCurrentUser()
+    const user = await getCurrentUser();
 
     if (!user) {
-      return NextResponse.json({ error: "Não autenticado" }, { status: 401 })
+      return NextResponse.json({ error: 'Não autenticado' }, { status: 401 });
     }
 
-    const { searchParams } = new URL(request.url)
-    const search = searchParams.get("search") || ""
-    const turmaId = searchParams.get("turma_id") || ""
-    const status = searchParams.get("status") || ""
+    const { searchParams } = new URL(request.url);
+    const search = searchParams.get('search') || '';
+    const turmaId = searchParams.get('turma_id') || '';
+    const status = searchParams.get('status') || '';
 
     const alunos = await prisma.aluno.findMany({
       where: {
@@ -30,8 +30,8 @@ export async function GET(request: NextRequest) {
         },
         ...(search && {
           OR: [
-            { nome: { contains: search, mode: "insensitive" } },
-            { matricula: { contains: search, mode: "insensitive" } },
+            { nome: { contains: search, mode: 'insensitive' } },
+            { matricula: { contains: search, mode: 'insensitive' } },
           ],
         }),
         ...(turmaId && {
@@ -57,9 +57,9 @@ export async function GET(request: NextRequest) {
         },
       },
       orderBy: {
-        nome: "asc",
+        nome: 'asc',
       },
-    })
+    });
 
     const alunosFormatted = alunos.map((aluno) => ({
       ...aluno,
@@ -68,36 +68,45 @@ export async function GET(request: NextRequest) {
         turma_nome: at.turma.nome,
         turma_disciplina: at.turma.disciplina,
       })),
-    }))
+    }));
 
-    return NextResponse.json({ alunos: alunosFormatted })
+    return NextResponse.json({ alunos: alunosFormatted });
   } catch (error) {
-    console.error("  Get alunos error:", error)
-    return NextResponse.json({ error: "Erro ao obter alunos" }, { status: 500 })
+    console.error('  Get alunos error:', error);
+    return NextResponse.json(
+      { error: 'Erro ao obter alunos' },
+      { status: 500 }
+    );
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const user = await getCurrentUser()
+    const user = await getCurrentUser();
 
     if (!user) {
-      return NextResponse.json({ error: "Não autenticado" }, { status: 401 })
+      return NextResponse.json({ error: 'Não autenticado' }, { status: 401 });
     }
 
-    const body = await request.json()
-    const { nome, matricula, email, foto_url, status, turma_ids } = body
+    const body = await request.json();
+    const { nome, matricula, email, foto_url, status, turma_ids } = body;
 
     if (!nome || !matricula) {
-      return NextResponse.json({ error: "Nome e matrícula são obrigatórios" }, { status: 400 })
+      return NextResponse.json(
+        { error: 'Nome e matrícula são obrigatórios' },
+        { status: 400 }
+      );
     }
 
     const existingAluno = await prisma.aluno.findUnique({
       where: { matricula },
-    })
+    });
 
     if (existingAluno) {
-      return NextResponse.json({ error: "Matrícula já cadastrada" }, { status: 409 })
+      return NextResponse.json(
+        { error: 'Matrícula já cadastrada' },
+        { status: 409 }
+      );
     }
 
     const aluno = await prisma.aluno.create({
@@ -106,9 +115,9 @@ export async function POST(request: NextRequest) {
         matricula,
         email: email || null,
         foto_url: foto_url || null,
-        status: status || "ativo",
+        status: status || 'ativo',
       },
-    })
+    });
 
     if (turma_ids && Array.isArray(turma_ids) && turma_ids.length > 0) {
       for (const turmaId of turma_ids) {
@@ -121,7 +130,7 @@ export async function POST(request: NextRequest) {
               },
             },
           },
-        })
+        });
 
         if (turmaValida) {
           await prisma.alunoTurma.create({
@@ -129,22 +138,22 @@ export async function POST(request: NextRequest) {
               aluno_id: aluno.id,
               turma_id: turmaId,
             },
-          })
+          });
 
           await prisma.notificacao.create({
             data: {
               usuario_id: user.userId,
-              tipo: "info",
+              tipo: 'info',
               mensagem: `Aluno "${nome}" foi adicionado à turma "${turmaValida.nome}".`,
             },
-          })
+          });
         }
       }
     }
 
-    return NextResponse.json({ aluno })
+    return NextResponse.json({ aluno });
   } catch (error) {
-    console.error("Create aluno error:", error)
-    return NextResponse.json({ error: "Erro ao criar aluno" }, { status: 500 })
+    console.error('Create aluno error:', error);
+    return NextResponse.json({ error: 'Erro ao criar aluno' }, { status: 500 });
   }
 }

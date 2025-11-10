@@ -1,18 +1,23 @@
-"use client"
+'use client';
 
-import { EmptyState } from "@/components/ui/empty-state"
-import { BookOpen } from "lucide-react"
-import { TurmaCard } from "@/modules/dashboard/turmas/components/TurmaCard"
-import { Turma } from "@/modules/dashboard/turmas/types/turmas.types"
+import { EmptyState } from '@/components/ui/empty-state';
+import { BookOpen } from 'lucide-react';
+import { TurmaCard } from '@/modules/dashboard/turmas/components/TurmaCard';
+import { Turma } from '@/modules/dashboard/turmas/types/turmas.types';
 
 interface TurmasListProps {
-  turmas: Turma[]
-  onEdit: (turma: Turma) => void
-  onDelete: (turma: Turma) => void
-  onCreate: () => void
+  turmas: Turma[];
+  onEdit: (turma: Turma) => void;
+  onDelete: (turma: Turma) => void;
+  onCreate: () => void;
 }
 
-export function TurmasList({ turmas, onEdit, onDelete, onCreate }: TurmasListProps) {
+export function TurmasList({
+  turmas,
+  onEdit,
+  onDelete,
+  onCreate,
+}: TurmasListProps) {
   if (turmas.length === 0) {
     return (
       <EmptyState
@@ -20,11 +25,11 @@ export function TurmasList({ turmas, onEdit, onDelete, onCreate }: TurmasListPro
         title="Nenhuma turma encontrada"
         description="Crie sua primeira turma para começar a organizar seus alunos"
         action={{
-          label: "Criar Turma",
+          label: 'Criar Turma',
           onClick: onCreate,
         }}
       />
-    )
+    );
   }
 
   return (
@@ -38,5 +43,5 @@ export function TurmasList({ turmas, onEdit, onDelete, onCreate }: TurmasListPro
         />
       ))}
     </div>
-  )
+  );
 }

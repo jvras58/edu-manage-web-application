@@ -1,9 +1,9 @@
-"use client"
+'use client';
 
-import { useEffect, useState } from "react"
-import { LoadingSpinner } from "@/components/ui/loading-spinner"
-import { useToast } from "@/hooks/use-toast"
-import { TurmaDialog } from "@/components/turmas/turma-dialog"
+import { useEffect, useState } from 'react';
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { useToast } from '@/hooks/use-toast';
+import { TurmaDialog } from '@/components/turmas/turma-dialog';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,87 +13,87 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { TurmasSearch } from "@/modules/dashboard/turmas/components/TurmasSearch"
-import { TurmasList } from "@/modules/dashboard/turmas/components/TurmasList"
-import { Turma } from "@/modules/dashboard/turmas/types/turmas.types"
+} from '@/components/ui/alert-dialog';
+import { TurmasSearch } from '@/modules/dashboard/turmas/components/TurmasSearch';
+import { TurmasList } from '@/modules/dashboard/turmas/components/TurmasList';
+import { Turma } from '@/modules/dashboard/turmas/types/turmas.types';
 
 export function TurmasContent() {
-  const { toast } = useToast()
-  const [loading, setLoading] = useState(true)
-  const [turmas, setTurmas] = useState<Turma[]>([])
-  const [search, setSearch] = useState("")
-  const [dialogOpen, setDialogOpen] = useState(false)
-  const [editingTurma, setEditingTurma] = useState<Turma | null>(null)
-  const [deletingTurma, setDeletingTurma] = useState<Turma | null>(null)
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(true);
+  const [turmas, setTurmas] = useState<Turma[]>([]);
+  const [search, setSearch] = useState('');
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editingTurma, setEditingTurma] = useState<Turma | null>(null);
+  const [deletingTurma, setDeletingTurma] = useState<Turma | null>(null);
 
   useEffect(() => {
-    fetchTurmas()
-  }, [])
+    fetchTurmas();
+  }, []);
 
   const fetchTurmas = async () => {
     try {
-      const response = await fetch("/api/turmas")
-      if (!response.ok) throw new Error("Erro ao carregar turmas")
+      const response = await fetch('/api/turmas');
+      if (!response.ok) throw new Error('Erro ao carregar turmas');
 
-      const data = await response.json()
-      setTurmas(data.turmas)
+      const data = await response.json();
+      setTurmas(data.turmas);
     } catch (error) {
       toast({
-        title: "Erro ao carregar turmas",
-        variant: "destructive",
-      })
+        title: 'Erro ao carregar turmas',
+        variant: 'destructive',
+      });
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleDelete = async () => {
-    if (!deletingTurma) return
+    if (!deletingTurma) return;
 
     try {
       const response = await fetch(`/api/turmas/${deletingTurma.id}`, {
-        method: "DELETE",
-      })
+        method: 'DELETE',
+      });
 
-      if (!response.ok) throw new Error("Erro ao deletar turma")
+      if (!response.ok) throw new Error('Erro ao deletar turma');
 
       toast({
-        title: "Turma removida com sucesso",
-      })
+        title: 'Turma removida com sucesso',
+      });
 
-      fetchTurmas()
-      setDeletingTurma(null)
+      fetchTurmas();
+      setDeletingTurma(null);
     } catch (error) {
       toast({
-        title: "Erro ao remover turma",
-        variant: "destructive",
-      })
+        title: 'Erro ao remover turma',
+        variant: 'destructive',
+      });
     }
-  }
+  };
 
   const filteredTurmas = turmas.filter(
     (turma) =>
       turma.nome.toLowerCase().includes(search.toLowerCase()) ||
-      turma.disciplina.toLowerCase().includes(search.toLowerCase()),
-  )
+      turma.disciplina.toLowerCase().includes(search.toLowerCase())
+  );
 
   const handleCreate = () => {
-    setEditingTurma(null)
-    setDialogOpen(true)
-  }
+    setEditingTurma(null);
+    setDialogOpen(true);
+  };
 
   const handleEdit = (turma: Turma) => {
-    setEditingTurma(turma)
-    setDialogOpen(true)
-  }
+    setEditingTurma(turma);
+    setDialogOpen(true);
+  };
 
   const handleDeleteClick = (turma: Turma) => {
-    setDeletingTurma(turma)
-  }
+    setDeletingTurma(turma);
+  };
 
   if (loading) {
-    return <LoadingSpinner />
+    return <LoadingSpinner />;
   }
 
   return (
@@ -112,29 +112,35 @@ export function TurmasContent() {
         onOpenChange={setDialogOpen}
         turma={editingTurma}
         onSuccess={() => {
-          fetchTurmas()
-          setDialogOpen(false)
+          fetchTurmas();
+          setDialogOpen(false);
         }}
       />
 
-
-      <AlertDialog open={!!deletingTurma} onOpenChange={() => setDeletingTurma(null)}>
+      <AlertDialog
+        open={!!deletingTurma}
+        onOpenChange={() => setDeletingTurma(null)}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Confirmar exclusão</AlertDialogTitle>
             <AlertDialogDescription>
-              Tem certeza que deseja excluir a turma "{deletingTurma?.nome}"? Esta ação não pode ser desfeita e removerá
-              todos os vínculos com alunos e critérios de avaliação.
+              Tem certeza que deseja excluir a turma "{deletingTurma?.nome}"?
+              Esta ação não pode ser desfeita e removerá todos os vínculos com
+              alunos e critérios de avaliação.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete} className="bg-red-600 hover:bg-red-700">
+            <AlertDialogAction
+              onClick={handleDelete}
+              className="bg-red-600 hover:bg-red-700"
+            >
               Excluir
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
     </>
-  )
+  );
 }

@@ -1,14 +1,15 @@
-"use client"
+'use client';
 
-import { Button } from "@/components/ui/button"
-import { ArrowLeft, Plus } from "lucide-react"
-import Link from "next/link"
-import { useCriteriosTurma } from "@/modules/dashboard/criterios/providers/CriteriosTurmaProvider"
+import { Button } from '@/components/ui/button';
+import { ArrowLeft, Plus } from 'lucide-react';
+import Link from 'next/link';
+import { useCriteriosTurma } from '@/modules/dashboard/criterios/providers/CriteriosTurmaProvider';
 
 export function CriteriosTurmaHeader() {
-  const { turma, somaPesos, setDialogOpen, setEditingCriterio } = useCriteriosTurma()
+  const { turma, somaPesos, setDialogOpen, setEditingCriterio } =
+    useCriteriosTurma();
 
-  if (!turma) return null
+  if (!turma) return null;
 
   return (
     <div className="flex items-start justify-between gap-4">
@@ -19,14 +20,16 @@ export function CriteriosTurmaHeader() {
           </Link>
         </Button>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Critérios de Avaliação</h1>
+          <h1 className="text-2xl font-bold text-gray-900">
+            Critérios de Avaliação
+          </h1>
           <p className="text-gray-600 mt-1">{turma.nome}</p>
         </div>
       </div>
       <Button
         onClick={() => {
-          setEditingCriterio(null)
-          setDialogOpen(true)
+          setEditingCriterio(null);
+          setDialogOpen(true);
         }}
         className="bg-blue-600 hover:bg-blue-700"
         disabled={somaPesos >= 100}
@@ -35,5 +38,5 @@ export function CriteriosTurmaHeader() {
         Novo Critério
       </Button>
     </div>
-  )
+  );
 }

@@ -38,15 +38,18 @@ O **EduManage** é uma plataforma full-stack que permite gerenciar usuários (ad
 ### Passos para Instalação
 
 1. **Clone o repositório**:
+
    ```bash
    git clone <url-do-repo>
    cd edu-manage-web-application
    ```
 
 2. **Instale as dependências**:
+
    ```bash
    pnpm install
    ```
+
    > Isso executa automaticamente `prisma generate` via `postinstall`.
 
 3. **Configure o banco**:
@@ -54,12 +57,14 @@ O **EduManage** é uma plataforma full-stack que permite gerenciar usuários (ad
    - Teste a conexão se necessário.
 
 4. **Sincronize o banco**:
+
    ```bash
    pnpm prisma migrate dev
    pnpm prisma db seed
    ```
 
 5. **Execute o projeto**:
+
    ```bash
    pnpm run dev
    ```

@@ -1,17 +1,21 @@
-"use client"
+'use client';
 
-import { EmptyState } from "@/components/ui/empty-state"
-import { Bell } from "lucide-react"
-import { NotificacaoCard } from "@/modules/dashboard/notificacoes/components/NotificacaoCard"
-import { Notificacao } from "@/modules/dashboard/notificacoes/types/notificacoes.types"
+import { EmptyState } from '@/components/ui/empty-state';
+import { Bell } from 'lucide-react';
+import { NotificacaoCard } from '@/modules/dashboard/notificacoes/components/NotificacaoCard';
+import { Notificacao } from '@/modules/dashboard/notificacoes/types/notificacoes.types';
 
 interface NotificacoesListProps {
-  notificacoes: Notificacao[]
-  onMarcarComoLida: (id: string) => void
-  onDeletar: (id: string) => void
+  notificacoes: Notificacao[];
+  onMarcarComoLida: (id: string) => void;
+  onDeletar: (id: string) => void;
 }
 
-export function NotificacoesList({ notificacoes, onMarcarComoLida, onDeletar }: NotificacoesListProps) {
+export function NotificacoesList({
+  notificacoes,
+  onMarcarComoLida,
+  onDeletar,
+}: NotificacoesListProps) {
   if (notificacoes.length === 0) {
     return (
       <EmptyState
@@ -19,7 +23,7 @@ export function NotificacoesList({ notificacoes, onMarcarComoLida, onDeletar }: 
         title="Nenhuma notificação"
         description="Você não tem notificações no momento"
       />
-    )
+    );
   }
 
   return (
@@ -33,5 +37,5 @@ export function NotificacoesList({ notificacoes, onMarcarComoLida, onDeletar }: 
         />
       ))}
     </div>
-  )
+  );
 }
