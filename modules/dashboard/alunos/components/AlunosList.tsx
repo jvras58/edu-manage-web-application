@@ -1,5 +1,3 @@
-"use client"
-
 import { EmptyState } from "@/components/ui/empty-state"
 import { Users } from "lucide-react"
 import { Aluno } from "../schemas/aluno.schema"
