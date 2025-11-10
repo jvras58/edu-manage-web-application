@@ -1,214 +1,265 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { ExportButton } from "@/components/ui/export-button"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Card } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Plus, Search, Pencil, Trash2 } from "lucide-react"
-import { Turma, Aluno } from "../schemas/aluno.schema"
+import { createContext, useContext, useEffect, useState, ReactNode } from "react"
+import { useToast } from "@/hooks/use-toast"
+import { LoadingSpinner } from "@/components/ui/loading-spinner"
+import { AlunoDialog } from "@/components/alunos/aluno-dialog"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import { Aluno, Turma } from "../schemas/aluno.schema"
+import { AlunosHeader } from "./AlunosHeader"
+import { AlunosFilters } from "./AlunosFilters"
+import { AlunosList } from "./AlunosList"
 
-interface AlunosHeaderProps {
-  onNovoAluno: () => void
-  statusFilter: string
-  turmaFilter: string
-}
-
-export function AlunosHeader({ onNovoAluno, statusFilter, turmaFilter }: AlunosHeaderProps) {
-  return (
-    <div className="flex flex-col sm:flex-row justify-between gap-4">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Alunos</h1>
-        <p className="text-gray-600 mt-1">Gerencie todos os seus alunos e suas informações</p>
-      </div>
-      <div className="flex gap-2">
-        <ExportButton
-          endpoint="/api/alunos/export"
-          filename="alunos.csv"
-          params={{
-            ...(statusFilter !== "todos" && { status: statusFilter }),
-            ...(turmaFilter !== "todas" && { turmaId: turmaFilter }),
-          }}
-          label="Exportar"
-        />
-        <Button
-          onClick={onNovoAluno}
-          className="bg-blue-600 hover:bg-blue-700"
-        >
-          <Plus className="h-4 w-4 mr-2" />
-          Novo Aluno
-        </Button>
-      </div>
-    </div>
-  )
-}
-
-interface AlunosFiltersProps {
-  search: string
-  onSearchChange: (value: string) => void
-  statusFilter: string
-  onStatusFilterChange: (value: string) => void
-  turmaFilter: string
-  onTurmaFilterChange: (value: string) => void
-  turmas: Turma[]
-}
-
-export function AlunosFilters({
-  search,
-  onSearchChange,
-  statusFilter,
-  onStatusFilterChange,
-  turmaFilter,
-  onTurmaFilterChange,
-  turmas,
-}: AlunosFiltersProps) {
-  return (
-    <div className="flex flex-col sm:flex-row gap-3">
-      <div className="relative flex-1">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-        <Input
-          placeholder="Buscar alunos..."
-          value={search}
-          onChange={(e) => onSearchChange(e.target.value)}
-          className="pl-10"
-        />
-      </div>
-      <Select value={statusFilter} onValueChange={onStatusFilterChange}>
-        <SelectTrigger className="w-full sm:w-[180px]">
-          <SelectValue placeholder="Status" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="todos">Todos os status</SelectItem>
-          <SelectItem value="ativo">Ativo</SelectItem>
-          <SelectItem value="inativo">Inativo</SelectItem>
-          <SelectItem value="trancado">Trancado</SelectItem>
-        </SelectContent>
-      </Select>
-      <Select value={turmaFilter} onValueChange={onTurmaFilterChange}>
-        <SelectTrigger className="w-full sm:w-[200px]">
-          <SelectValue placeholder="Turma" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="todas">Todas as turmas</SelectItem>
-          {turmas.map((turma) => (
-            <SelectItem key={turma.id} value={turma.id}>
-              {turma.nome}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
-  )
-}
-
-interface AlunoCardProps {
-  aluno: Aluno
-  onEdit: (aluno: Aluno) => void
-  onDelete: (aluno: Aluno) => void
-}
-
-export function AlunoCard({ aluno, onEdit, onDelete }: AlunoCardProps) {
-  const getStatusBadge = (status: string) => {
-    const variants = {
-      ativo: "success",
-      inativo: "warning",
-      trancado: "destructive",
-    } as const
-
-    return variants[status as keyof typeof variants] || "default"
-  }
-
-  const getInitials = (name: string) => {
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2)
-  }
-
-  return (
-    <Card className="p-6 space-y-4">
-      <div className="flex items-start gap-3">
-        <Avatar className="h-12 w-12">
-          <AvatarImage src={aluno.foto_url || undefined} />
-          <AvatarFallback className="bg-blue-100 text-blue-700">{getInitials(aluno.nome)}</AvatarFallback>
-        </Avatar>
-        <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-gray-900 truncate">{aluno.nome}</h3>
-          <p className="text-sm text-gray-600">{aluno.matricula}</p>
-          {aluno.email && <p className="text-sm text-gray-600 truncate">{aluno.email}</p>}
-        </div>
-        <Badge variant={getStatusBadge(aluno.status)}>{aluno.status}</Badge>
-      </div>
-
-      {/* Turmas */}
-      {aluno.turmas && aluno.turmas.length > 0 && (
-        <div className="flex flex-wrap gap-2">
-          {aluno.turmas.map((turma, idx) => (
-            <Badge key={idx} variant="outline" className="text-xs">
-              {turma.turma_nome}
-            </Badge>
-          ))}
-        </div>
-      )}
-
-      {/* Actions */}
-      <div className="flex gap-2 pt-2">
-        <Button
-          variant="outline"
-          size="sm"
-          className="flex-1 bg-transparent"
-          onClick={() => onEdit(aluno)}
-        >
-          <Pencil className="h-4 w-4 mr-2" />
-          Editar
-        </Button>
-        <Button variant="outline" size="icon" onClick={() => onDelete(aluno)}>
-          <Trash2 className="h-4 w-4 text-red-600" />
-        </Button>
-      </div>
-    </Card>
-  )
-}
-
-import { EmptyState } from "@/components/ui/empty-state"
-import { Users } from "lucide-react"
-
-interface AlunosListProps {
+interface AlunosContextType {
+  loading: boolean
   alunos: Aluno[]
-  onNovoAluno: () => void
-  onEdit: (aluno: Aluno) => void
-  onDelete: (aluno: Aluno) => void
+  turmas: Turma[]
+  search: string
+  setSearch: (value: string) => void
+  statusFilter: string
+  setStatusFilter: (value: string) => void
+  turmaFilter: string
+  setTurmaFilter: (value: string) => void
+  dialogOpen: boolean
+  setDialogOpen: (value: boolean) => void
+  editingAluno: Aluno | null
+  setEditingAluno: (value: Aluno | null) => void
+  deletingAluno: Aluno | null
+  setDeletingAluno: (value: Aluno | null) => void
+  fetchData: () => Promise<void>
+  handleDelete: () => Promise<void>
+  filteredAlunos: Aluno[]
+  handleNovoAluno: () => void
+  handleEdit: (aluno: Aluno) => void
+  handleDeleteClick: (aluno: Aluno) => void
 }
 
-export function AlunosList({ alunos, onNovoAluno, onEdit, onDelete }: AlunosListProps) {
-  if (alunos.length === 0) {
-    return (
-      <EmptyState
-        icon={Users}
-        title="Nenhum aluno encontrado"
-        description="Adicione alunos para começar a gerenciar suas turmas"
-        action={{
-          label: "Adicionar Aluno",
-          onClick: onNovoAluno,
+const AlunosContext = createContext<AlunosContextType | undefined>(undefined)
+
+export function AlunosProvider({ children }: { children: ReactNode }) {
+  const { toast } = useToast()
+  const [loading, setLoading] = useState(true)
+  const [alunos, setAlunos] = useState<Aluno[]>([])
+  const [turmas, setTurmas] = useState<Turma[]>([])
+  const [search, setSearch] = useState("")
+  const [statusFilter, setStatusFilter] = useState("todos")
+  const [turmaFilter, setTurmaFilter] = useState("todas")
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const [editingAluno, setEditingAluno] = useState<Aluno | null>(null)
+  const [deletingAluno, setDeletingAluno] = useState<Aluno | null>(null)
+
+  useEffect(() => {
+    fetchData()
+  }, [statusFilter, turmaFilter])
+
+  const fetchData = async () => {
+    try {
+      let alunosUrl = "/api/alunos?"
+      if (statusFilter !== "todos") {
+        alunosUrl += `status=${statusFilter}&`
+      }
+      if (turmaFilter !== "todas") {
+        alunosUrl += `turma_id=${turmaFilter}&`
+      }
+
+      const [alunosRes, turmasRes] = await Promise.all([fetch(alunosUrl), fetch("/api/turmas")])
+
+      if (!alunosRes.ok || !turmasRes.ok) {
+        throw new Error("Erro ao carregar dados")
+      }
+
+      const alunosData = await alunosRes.json()
+      const turmasData = await turmasRes.json()
+
+      setAlunos(alunosData.alunos)
+      setTurmas(turmasData.turmas)
+    } catch (error) {
+      toast({
+        title: "Erro ao carregar dados",
+        variant: "destructive",
+      })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleDelete = async () => {
+    if (!deletingAluno) return
+
+    try {
+      const response = await fetch(`/api/alunos/${deletingAluno.id}`, {
+        method: "DELETE",
+      })
+
+      if (!response.ok) throw new Error("Erro ao deletar aluno")
+
+      toast({
+        title: "Aluno removido com sucesso",
+      })
+
+      fetchData()
+      setDeletingAluno(null)
+    } catch (error) {
+      toast({
+        title: "Erro ao remover aluno",
+        variant: "destructive",
+      })
+    }
+  }
+
+  const filteredAlunos = alunos.filter(
+    (aluno) =>
+      aluno.nome.toLowerCase().includes(search.toLowerCase()) ||
+      aluno.matricula.toLowerCase().includes(search.toLowerCase()),
+  )
+
+  const handleNovoAluno = () => {
+    setEditingAluno(null)
+    setDialogOpen(true)
+  }
+
+  const handleEdit = (aluno: Aluno) => {
+    setEditingAluno(aluno)
+    setDialogOpen(true)
+  }
+
+  const handleDeleteClick = (aluno: Aluno) => {
+    setDeletingAluno(aluno)
+  }
+
+  return (
+    <AlunosContext.Provider
+      value={{
+        loading,
+        alunos,
+        turmas,
+        search,
+        setSearch,
+        statusFilter,
+        setStatusFilter,
+        turmaFilter,
+        setTurmaFilter,
+        dialogOpen,
+        setDialogOpen,
+        editingAluno,
+        setEditingAluno,
+        deletingAluno,
+        setDeletingAluno,
+        fetchData,
+        handleDelete,
+        filteredAlunos,
+        handleNovoAluno,
+        handleEdit,
+        handleDeleteClick,
+      }}
+    >
+      {children}
+    </AlunosContext.Provider>
+  )
+}
+
+export function useAlunos() {
+  const context = useContext(AlunosContext)
+  if (!context) {
+    throw new Error("useAlunos must be used within an AlunosProvider")
+  }
+  return context
+}
+
+export function AlunosDashboard() {
+  const {
+    loading,
+    turmas,
+    search,
+    setSearch,
+    statusFilter,
+    setStatusFilter,
+    turmaFilter,
+    setTurmaFilter,
+    dialogOpen,
+    setDialogOpen,
+    editingAluno,
+    deletingAluno,
+    setDeletingAluno,
+    fetchData,
+    handleDelete,
+    filteredAlunos,
+    handleNovoAluno,
+    handleEdit,
+    handleDeleteClick,
+  } = useAlunos()
+
+  if (loading) {
+    return <LoadingSpinner />
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <AlunosHeader
+        onNovoAluno={handleNovoAluno}
+        statusFilter={statusFilter}
+        turmaFilter={turmaFilter}
+      />
+
+      {/* Filters */}
+      <AlunosFilters
+        search={search}
+        onSearchChange={setSearch}
+        statusFilter={statusFilter}
+        onStatusFilterChange={setStatusFilter}
+        turmaFilter={turmaFilter}
+        onTurmaFilterChange={setTurmaFilter}
+        turmas={turmas}
+      />
+
+      {/* Lista de Alunos */}
+      <AlunosList
+        alunos={filteredAlunos}
+        onNovoAluno={handleNovoAluno}
+        onEdit={handleEdit}
+        onDelete={handleDeleteClick}
+      />
+
+      {/* Dialog Criar/Editar */}
+      <AlunoDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        aluno={editingAluno}
+        turmas={turmas}
+        onSuccess={() => {
+          fetchData()
+          setDialogOpen(false)
         }}
       />
-    )
-  }
 
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {alunos.map((aluno) => (
-        <AlunoCard
-          key={aluno.id}
-          aluno={aluno}
-          onEdit={onEdit}
-          onDelete={onDelete}
-        />
-      ))}
+      {/* Dialog Confirmar Exclusão */}
+      <AlertDialog open={!!deletingAluno} onOpenChange={() => setDeletingAluno(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar exclusão</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tem certeza que deseja excluir o aluno "{deletingAluno?.nome}"? Esta ação não pode ser desfeita e removerá
+              todos os vínculos com turmas.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete} className="bg-red-600 hover:bg-red-700">
+              Excluir
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }
