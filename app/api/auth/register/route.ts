@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
       },
     })
   } catch (error) {
-    console.error("[v0] Register error:", error)
+    console.error("  Register error:", error)
     return NextResponse.json({ error: "Erro ao criar usuário" }, { status: 500 })
   }
 }

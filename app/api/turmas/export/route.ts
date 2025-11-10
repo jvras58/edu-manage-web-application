@@ -59,7 +59,7 @@ export async function GET(request: NextRequest) {
       },
     })
   } catch (error) {
-    console.error("[v0] Export error:", error)
+    console.error("  Export error:", error)
     return NextResponse.json({ error: "Erro ao exportar dados" }, { status: 500 })
   }
 }

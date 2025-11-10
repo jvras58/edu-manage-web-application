@@ -42,7 +42,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       somaPesos,
     })
   } catch (error) {
-    console.error("[v0] Get criterios error:", error)
+    console.error("  Get criterios error:", error)
     return NextResponse.json({ error: "Erro ao obter critérios" }, { status: 500 })
   }
 }
@@ -121,7 +121,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
     return NextResponse.json({ criterio })
   } catch (error) {
-    console.error("[v0] Create criterio error:", error)
+    console.error("  Create criterio error:", error)
     return NextResponse.json({ error: "Erro ao criar critério" }, { status: 500 })
   }
 }

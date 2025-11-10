@@ -32,7 +32,7 @@ export async function PATCH(_request: NextRequest, { params }: { params: Promise
 
     return NextResponse.json({ notificacao: updated })
   } catch (error) {
-    console.error("[v0] Update notification error:", error)
+    console.error("  Update notification error:", error)
     return NextResponse.json({ error: "Erro ao atualizar notificação" }, { status: 500 })
   }
 }
@@ -60,7 +60,7 @@ export async function DELETE(_request: NextRequest, { params }: { params: Promis
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error("[v0] Delete notification error:", error)
+    console.error("  Delete notification error:", error)
     return NextResponse.json({ error: "Erro ao deletar notificação" }, { status: 500 })
   }
 }

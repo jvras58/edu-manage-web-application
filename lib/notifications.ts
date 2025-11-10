@@ -16,7 +16,7 @@ export async function createNotification({ usuarioId, tipo, mensagem }: CreateNo
       },
     })
   } catch (error) {
-    console.error("[v0] Failed to create notification:", error)
+    console.error("  Failed to create notification:", error)
   }
 }
 
@@ -35,6 +35,6 @@ export async function notifyProfessoresInTurma(turmaId: string, tipo: string, me
       })
     }
   } catch (error) {
-    console.error("[v0] Failed to notify professors:", error)
+    console.error("  Failed to notify professors:", error)
   }
 }

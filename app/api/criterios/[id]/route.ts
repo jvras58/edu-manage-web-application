@@ -85,7 +85,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
     return NextResponse.json({ criterio })
   } catch (error) {
-    console.error("[v0] Update criterio error:", error)
+    console.error("  Update criterio error:", error)
     return NextResponse.json({ error: "Erro ao atualizar critério" }, { status: 500 })
   }
 }
@@ -137,7 +137,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error("[v0] Delete criterio error:", error)
+    console.error("  Delete criterio error:", error)
     return NextResponse.json({ error: "Erro ao deletar critério" }, { status: 500 })
   }
 }

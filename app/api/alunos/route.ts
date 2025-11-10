@@ -72,7 +72,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ alunos: alunosFormatted })
   } catch (error) {
-    console.error("[v0] Get alunos error:", error)
+    console.error("  Get alunos error:", error)
     return NextResponse.json({ error: "Erro ao obter alunos" }, { status: 500 })
   }
 }
@@ -150,7 +150,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ aluno })
   } catch (error) {
-    console.error("[v0] Create aluno error:", error)
+    console.error("  Create aluno error:", error)
     return NextResponse.json({ error: "Erro ao criar aluno" }, { status: 500 })
   }
 }
