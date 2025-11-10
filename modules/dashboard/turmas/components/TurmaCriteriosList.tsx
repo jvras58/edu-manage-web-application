@@ -1,9 +1,8 @@
 "use client"
 
 import { Card } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { useTurmaDetalhes } from "../providers/TurmaDetalhesProvider"
+import { useTurmaDetalhes } from "@/modules/dashboard/turmas/providers/TurmaDetalhesProvider"
 
 export function TurmaCriteriosList() {
   const { criterios } = useTurmaDetalhes()

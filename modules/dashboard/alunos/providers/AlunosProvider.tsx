@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, ReactNode } from "react"
 import { useToast } from "@/hooks/use-toast"
-import { Aluno, Turma } from "../schemas/aluno.schema"
+import { Aluno, Turma } from "@/modules/dashboard/alunos/schemas/aluno.schema"
 
 interface AlunosContextType {
   loading: boolean

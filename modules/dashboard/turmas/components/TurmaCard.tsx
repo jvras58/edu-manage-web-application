@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Users, ClipboardList, Pencil, Trash2 } from "lucide-react"
 import Link from "next/link"
-import { Turma } from "../types/turmas.types"
+import { Turma } from "@/modules/dashboard/turmas/types/turmas.types"
 
 interface TurmaCardProps {
   turma: Turma

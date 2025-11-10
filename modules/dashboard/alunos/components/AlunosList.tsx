@@ -1,7 +1,7 @@
 import { EmptyState } from "@/components/ui/empty-state"
 import { Users } from "lucide-react"
-import { Aluno } from "../schemas/aluno.schema"
-import { AlunoCard } from "./AlunoCard"
+import { Aluno } from "@/modules/dashboard/alunos/schemas/aluno.schema"
+import { AlunoCard } from "@/modules/dashboard/alunos/components/AlunoCard"
 
 export function AlunosList({ alunos, onNovoAluno, onEdit, onDelete }: { alunos: Aluno[]; onNovoAluno: () => void; onEdit: (aluno: Aluno) => void; onDelete: (aluno: Aluno) => void }) {
   if (alunos.length === 0) {

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, Pencil } from "lucide-react"
 import Link from "next/link"
-import { useTurmaDetalhes } from "../providers/TurmaDetalhesProvider"
+import { useTurmaDetalhes } from "@/modules/dashboard/turmas/providers/TurmaDetalhesProvider"
 
 export function TurmaDetalhesHeader() {
   const { turma, setEditDialogOpen } = useTurmaDetalhes()

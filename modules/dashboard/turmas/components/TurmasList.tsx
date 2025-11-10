@@ -2,8 +2,8 @@
 
 import { EmptyState } from "@/components/ui/empty-state"
 import { BookOpen } from "lucide-react"
-import { TurmaCard } from "./TurmaCard"
-import { Turma } from "../types/turmas.types"
+import { TurmaCard } from "@/modules/dashboard/turmas/components/TurmaCard"
+import { Turma } from "@/modules/dashboard/turmas/types/turmas.types"
 
 interface TurmasListProps {
   turmas: Turma[]

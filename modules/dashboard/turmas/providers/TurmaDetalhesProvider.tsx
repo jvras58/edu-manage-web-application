@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react"
 import { useToast } from "@/hooks/use-toast"
 import { useRouter } from "next/navigation"
-import { Turma, Aluno, Criterio } from "../types/turmas.types"
+import { Turma, Aluno, Criterio } from "@/modules/dashboard/turmas/types/turmas.types"
 
 interface TurmaDetalhesContextType {
   loading: boolean

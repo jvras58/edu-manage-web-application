@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Check, Trash2 } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { Notificacao } from "../types/notificacoes.types"
+import { Notificacao } from "@/modules/dashboard/notificacoes/types/notificacoes.types"
 
 interface NotificacaoCardProps {
   notificacao: Notificacao

@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, ReactNode } from "react"
 import { useToast } from "@/hooks/use-toast"
-import { Criterio, TurmaCriterios } from "../types/criterios.types"
+import { Criterio, TurmaCriterios } from "@/modules/dashboard/criterios/types/criterios.types"
 
 interface CriteriosTurmaContextType {
   loading: boolean

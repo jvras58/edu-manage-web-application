@@ -12,10 +12,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import { CriteriosTurmaHeader } from "./CriteriosTurmaHeader"
-import { CriteriosPesoCard } from "./CriteriosPesoCard"
-import { CriteriosTurmaList } from "./CriteriosTurmaList"
-import { useCriteriosTurma } from "../providers/CriteriosTurmaProvider"
+import { CriteriosTurmaHeader } from "@/modules/dashboard/criterios/components/CriteriosTurmaHeader"
+import { CriteriosPesoCard } from "@/modules/dashboard/criterios/components/CriteriosPesoCard"
+import { CriteriosTurmaList } from "@/modules/dashboard/criterios/components/CriteriosTurmaList"
+import { useCriteriosTurma } from "@/modules/dashboard/criterios/providers/CriteriosTurmaProvider"
 
 interface CriteriosTurmaDashboardProps {
   turmaId: string

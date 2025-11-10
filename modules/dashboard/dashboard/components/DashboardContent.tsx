@@ -3,10 +3,10 @@
 import { useEffect, useState } from "react"
 import { LoadingSpinner } from "@/components/ui/loading-spinner"
 import { useToast } from "@/hooks/use-toast"
-import { DashboardStatsCards } from "./DashboardStatsCards"
-import { DashboardAlunosStatus } from "./DashboardAlunosStatus"
-import { DashboardTurmasRecentes } from "./DashboardTurmasRecentes"
-import { DashboardStats, AlunosPorStatus, TurmaRecente } from "../types/dashboard.types"
+import { DashboardStatsCards } from "@/modules/dashboard/dashboard/components/DashboardStatsCards"
+import { DashboardAlunosStatus } from "@/modules/dashboard/dashboard/components/DashboardAlunosStatus"
+import { DashboardTurmasRecentes } from "@/modules/dashboard/dashboard/components/DashboardTurmasRecentes"
+import { DashboardStats, AlunosPorStatus, TurmaRecente } from "@/modules/dashboard/dashboard/types/dashboard.types"
 
 export function DashboardContent() {
   const { toast } = useToast()

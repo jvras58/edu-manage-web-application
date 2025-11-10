@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { LoadingSpinner } from "@/components/ui/loading-spinner"
 import { useToast } from "@/hooks/use-toast"
 import { NotificacoesList } from "./NotificacoesList"
-import { Notificacao } from "../types/notificacoes.types"
+import { Notificacao } from "@/modules/dashboard/notificacoes/types/notificacoes.types"
 
 export function NotificacoesContent() {
   const { toast } = useToast()

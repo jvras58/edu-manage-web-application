@@ -2,7 +2,7 @@
 
 import { StatsCard } from "@/components/dashboard/stats-card"
 import { Users, BookOpen, ClipboardList, Bell } from "lucide-react"
-import { DashboardStats } from "../types/dashboard.types"
+import { DashboardStats } from "@/modules/dashboard/dashboard/types/dashboard.types"
 
 interface DashboardStatsProps {
   stats: DashboardStats

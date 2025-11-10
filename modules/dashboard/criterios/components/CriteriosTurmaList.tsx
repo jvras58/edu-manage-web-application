@@ -3,7 +3,7 @@
 import { EmptyState } from "@/components/ui/empty-state"
 import { ClipboardList } from "lucide-react"
 import { CriterioCard } from "./CriterioCard"
-import { useCriteriosTurma } from "../providers/CriteriosTurmaProvider"
+import { useCriteriosTurma } from "@/modules/dashboard/criterios/providers/CriteriosTurmaProvider"
 
 export function CriteriosTurmaList() {
   const {

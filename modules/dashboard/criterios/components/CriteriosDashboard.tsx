@@ -6,7 +6,7 @@ import { LoadingSpinner } from "@/components/ui/loading-spinner"
 import { EmptyState } from "@/components/ui/empty-state"
 import { ClipboardList, BookOpen } from "lucide-react"
 import Link from "next/link"
-import { useCriterios } from "../providers/CriteriosProvider"
+import { useCriterios } from "@/modules/dashboard/criterios/providers/CriteriosProvider"
 
 export function CriteriosDashboard() {
   const { loading, turmas } = useCriterios()
