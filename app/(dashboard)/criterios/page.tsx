@@ -1,4 +1,9 @@
 import { CriteriosDashboard } from "@/modules/dashboard/criterios/components/CriteriosDashboard"
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Critérios de Avaliação - Painel",
+};
 
 export default function CriteriosPage() {
   return (
