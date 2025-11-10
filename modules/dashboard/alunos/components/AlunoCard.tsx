@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Pencil, Trash2 } from "lucide-react"
-import { Aluno } from "../schemas/aluno.schema"
+import { Aluno } from "@/modules/dashboard/alunos/schemas/aluno.schema"
 
 interface AlunoCardProps {
   aluno: Aluno

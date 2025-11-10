@@ -2,8 +2,8 @@
 
 import { EmptyState } from "@/components/ui/empty-state"
 import { Bell } from "lucide-react"
-import { NotificacaoCard } from "./NotificacaoCard"
-import { Notificacao } from "../types/notificacoes.types"
+import { NotificacaoCard } from "@/modules/dashboard/notificacoes/components/NotificacaoCard"
+import { Notificacao } from "@/modules/dashboard/notificacoes/types/notificacoes.types"
 
 interface NotificacoesListProps {
   notificacoes: Notificacao[]

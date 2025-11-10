@@ -12,10 +12,11 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import { AlunosToolbar } from "./AlunosToolbar"
-import { AlunosFilters } from "./AlunosFilters"
-import { AlunosList } from "./AlunosList"
-import { useAlunos } from "../providers/AlunosProvider"
+
+import { AlunosToolbar } from "@/modules/dashboard/alunos/components/AlunosToolbar"
+import { AlunosFilters } from "@/modules/dashboard/alunos/components/AlunosFilters"
+import { AlunosList } from "@/modules/dashboard/alunos/components/AlunosList"
+import { useAlunos } from "@/modules/dashboard/alunos/providers/AlunosProvider"
 
 export function AlunosDashboard() {
   const {

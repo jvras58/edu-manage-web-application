@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Progress } from "@/components/ui/progress"
 import { AlertCircle } from "lucide-react"
-import { useCriteriosTurma } from "../providers/CriteriosTurmaProvider"
+import { useCriteriosTurma } from "@/modules/dashboard/criterios/providers/CriteriosTurmaProvider"
 
 export function CriteriosPesoCard() {
   const { somaPesos, pesoDisponivel } = useCriteriosTurma()

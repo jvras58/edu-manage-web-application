@@ -2,7 +2,7 @@
 
 import { Card } from "@/components/ui/card"
 import { Users, ClipboardList } from "lucide-react"
-import { useTurmaDetalhes } from "../providers/TurmaDetalhesProvider"
+import { useTurmaDetalhes } from "@/modules/dashboard/turmas/providers/TurmaDetalhesProvider"
 
 export function TurmaStatsCards() {
   const { turma } = useTurmaDetalhes()

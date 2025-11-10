@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { ArrowLeft, Plus } from "lucide-react"
 import Link from "next/link"
-import { useCriteriosTurma } from "../providers/CriteriosTurmaProvider"
+import { useCriteriosTurma } from "@/modules/dashboard/criterios/providers/CriteriosTurmaProvider"
 
 export function CriteriosTurmaHeader() {
   const { turma, somaPesos, setDialogOpen, setEditingCriterio } = useCriteriosTurma()

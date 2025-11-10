@@ -2,7 +2,7 @@
 
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { AlunosPorStatus } from "../types/dashboard.types"
+import { AlunosPorStatus } from "@/modules/dashboard/dashboard/types/dashboard.types"
 
 interface DashboardAlunosStatusProps {
   alunosPorStatus: AlunosPorStatus[]

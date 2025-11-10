@@ -2,7 +2,7 @@
 
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { useTurmaDetalhes } from "../providers/TurmaDetalhesProvider"
+import { useTurmaDetalhes } from "@/modules/dashboard/turmas/providers/TurmaDetalhesProvider"
 
 export function TurmaAlunosList() {
   const { alunos } = useTurmaDetalhes()

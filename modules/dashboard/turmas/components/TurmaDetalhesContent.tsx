@@ -1,10 +1,10 @@
 "use client"
 
-import { useTurmaDetalhes } from "../providers/TurmaDetalhesProvider"
-import { TurmaDetalhesHeader } from "./TurmaDetalhesHeader"
-import { TurmaStatsCards } from "./TurmaStatsCards"
-import { TurmaAlunosList } from "./TurmaAlunosList"
-import { TurmaCriteriosList } from "./TurmaCriteriosList"
+import { useTurmaDetalhes } from "@/modules/dashboard/turmas/providers/TurmaDetalhesProvider"
+import { TurmaDetalhesHeader } from "@/modules/dashboard/turmas/components/TurmaDetalhesHeader"
+import { TurmaStatsCards } from "@/modules/dashboard/turmas/components/TurmaStatsCards"
+import { TurmaAlunosList } from "@/modules/dashboard/turmas/components/TurmaAlunosList"
+import { TurmaCriteriosList } from "@/modules/dashboard/turmas/components/TurmaCriteriosList"
 
 export function TurmaDetalhesContent() {
   const { loading } = useTurmaDetalhes()

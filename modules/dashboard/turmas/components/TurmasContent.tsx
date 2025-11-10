@@ -14,9 +14,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import { TurmasSearch } from "./TurmasSearch"
-import { TurmasList } from "./TurmasList"
-import { Turma } from "../types/turmas.types"
+import { TurmasSearch } from "@/modules/dashboard/turmas/components/TurmasSearch"
+import { TurmasList } from "@/modules/dashboard/turmas/components/TurmasList"
+import { Turma } from "@/modules/dashboard/turmas/types/turmas.types"
 
 export function TurmasContent() {
   const { toast } = useToast()

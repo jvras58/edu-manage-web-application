@@ -2,7 +2,7 @@
 
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { TurmaRecente } from "../types/dashboard.types"
+import { TurmaRecente } from "@/modules/dashboard/dashboard/types/dashboard.types"
 
 interface DashboardTurmasRecentesProps {
   turmasRecentes: TurmaRecente[]

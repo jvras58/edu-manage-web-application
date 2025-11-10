@@ -1,6 +1,5 @@
 import { z } from "zod"
 
-// Schema para Turma
 export const turmaSchema = z.object({
   id: z.string(),
   nome: z.string(),
