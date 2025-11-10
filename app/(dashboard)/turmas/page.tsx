@@ -2,6 +2,11 @@ import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
 import { ExportButton } from "@/components/ui/export-button"
 import { TurmasContent } from "@/modules/dashboard/turmas/components/TurmasContent"
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Turmas - Painel",
+};
 
 export default function TurmasPage() {
   return (

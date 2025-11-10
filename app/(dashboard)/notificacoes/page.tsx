@@ -1,4 +1,9 @@
 import { NotificacoesContent } from "@/modules/dashboard/notificacoes/components/NotificacoesContent"
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Notificações - Painel",
+};
 
 export default function NotificacoesPage() {
   return (

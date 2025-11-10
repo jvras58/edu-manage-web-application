@@ -1,5 +1,10 @@
 import { GraduationCap } from "lucide-react"
 import { LoginForm } from "@/modules/auth/components/auth-components"
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Login - EduManage",
+};
 
 export default function LoginPage() {
   return (

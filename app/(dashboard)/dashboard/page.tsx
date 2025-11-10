@@ -1,4 +1,9 @@
 import { DashboardContent } from "@/modules/dashboard/dashboard/components/DashboardContent"
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Dashboard - EduManage",
+};
 
 export default function DashboardPage() {
   return (
