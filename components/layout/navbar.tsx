@@ -145,7 +145,7 @@ export function Navbar({ onMenuClick }: NavbarProps) {
               <div className="flex items-center justify-between px-4 py-3 border-b">
                 <h3 className="font-semibold text-sm">Notificações</h3>
                 {naoLidas > 0 && (
-                  <Badge variant="destructive" className="h-5 px-2 text-xs">
+                  <Badge variant="info" className="h-5 px-2 text-xs">
                     {naoLidas} nova{naoLidas > 1 ? "s" : ""}
                   </Badge>
                 )}
