@@ -10,7 +10,7 @@ Uma aplicação web completa para gerenciamento educacional, desenvolvida com te
 
 ## ✨ Sobre o Projeto
 
-O **EduManage** é uma plataforma full-stack que permite gerenciar usuários (admins e professores), turmas, alunos, critérios de avaliação e notificações de forma eficiente. Construída com **Next.js** para o frontend e backend, **Prisma** como ORM, **PostgreSQL** hospedado no Neon, e uma interface elegante usando **Radix UI** e **Tailwind CSS**.
+O **EduManage** é uma plataforma full-stack que permite gerenciar usuários (admins e professores), turmas, alunos, critérios de avaliação e notificações de forma eficiente. Construída com **Next.js** para o frontend e backend, **Prisma** como ORM, **PostgreSQL** hospedado no Neon, e uma interface elegante usando **ShadcnUI** e **Tailwind CSS**.
 
 ### 🚀 Funcionalidades Principais
 
