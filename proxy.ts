@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyToken } from '@/lib/auth'
 
-// Rotas públicas que não precisam de autenticação
-const publicRoutes = ['/login', '/register']
 
-// Rotas protegidas que exigem autenticação
+const publicRoutes = ['/login']
+
 const protectedRoutes = [
   '/dashboard',
   '/alunos',
@@ -13,7 +12,6 @@ const protectedRoutes = [
   '/notificacoes',
 ]
 
-// Rotas de API protegidas
 const protectedApiRoutes = [
   '/api/alunos',
   '/api/turmas',
@@ -25,7 +23,6 @@ const protectedApiRoutes = [
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // 1. Verificar se a rota é protegida
   const isProtectedRoute = protectedRoutes.some((route) =>
     pathname.startsWith(route)
   )
@@ -34,42 +31,33 @@ export async function proxy(request: NextRequest) {
   )
   const isPublicRoute = publicRoutes.some((route) => pathname.startsWith(route))
 
-  // 2. Obter token do cookie
   const token = request.cookies.get('auth-token')?.value
 
-  // 3. Se não há token e a rota é protegida, redirecionar para login
   if (!token && (isProtectedRoute || isProtectedApiRoute)) {
     if (isProtectedApiRoute) {
-      // Para APIs, retornar 401
       return NextResponse.json(
         { error: 'Não autorizado' },
         { status: 401 }
       )
     }
-    // Para páginas, redirecionar para login
     const loginUrl = new URL('/login', request.url)
     loginUrl.searchParams.set('redirect', pathname)
     return NextResponse.redirect(loginUrl)
   }
 
-  // 4. Verificar validade do token
   if (token) {
     const user = await verifyToken(token)
 
-    // Token inválido ou expirado
     if (!user) {
-      // Limpar cookie inválido
       const response = NextResponse.redirect(new URL('/login', request.url))
       response.cookies.delete('auth-token')
       return response
     }
 
-    // 5. Se usuário está autenticado e tenta acessar rota pública, redirecionar para dashboard
     if (isPublicRoute && pathname !== '/') {
       return NextResponse.redirect(new URL('/dashboard', request.url))
     }
 
-    // 6. Adicionar informações do usuário aos headers da requisição (opcional)
     const requestHeaders = new Headers(request.headers)
     requestHeaders.set('x-user-id', user.userId)
     requestHeaders.set('x-user-email', user.email)
@@ -85,7 +73,6 @@ export async function proxy(request: NextRequest) {
   return NextResponse.next()
 }
 
-// Configurar rotas onde o middleware deve executar
 export const config = {
   matcher: [
     /*
