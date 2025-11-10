@@ -18,7 +18,7 @@ export function AlunoCard({ aluno, onEdit, onDelete }: AlunoCardProps) {
     const variants = {
       ativo: "success",
       inativo: "warning",
-      trancado: "destructive",
+      trancado: "warning",
     } as const
 
     return variants[status as keyof typeof variants] || "default"
