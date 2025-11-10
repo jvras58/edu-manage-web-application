@@ -168,7 +168,7 @@ export function AlunoDialog({ open, onOpenChange, aluno, turmas, onSuccess }: Al
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Foto */}
+
           <div className="flex items-center gap-4">
             <Avatar className="h-20 w-20">
               <AvatarImage src={formData.foto_url || undefined} />
@@ -262,7 +262,7 @@ export function AlunoDialog({ open, onOpenChange, aluno, turmas, onSuccess }: Al
             </Select>
           </div>
 
-          {/* Turmas */}
+
           <div className="space-y-2">
             <Label>Turmas</Label>
             <div className="flex flex-wrap gap-2">

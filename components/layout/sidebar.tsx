@@ -64,10 +64,8 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   return (
     <>
-      {/* Overlay para mobile */}
       {isOpen && <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={onClose} />}
 
-      {/* Sidebar */}
       <aside
         className={cn(
           "fixed top-0 left-0 z-50 h-full w-64 bg-white border-r border-gray-200 transition-transform duration-300 lg:translate-x-0",
@@ -75,7 +73,6 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         )}
       >
         <div className="flex flex-col h-full">
-          {/* Logo */}
           <div className="p-6 border-b border-gray-200">
             <Link href="/dashboard" className="flex items-center gap-3" onClick={onClose}>
               <div className="bg-blue-600 p-2 rounded-lg">
@@ -88,7 +85,6 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             </Link>
           </div>
 
-          {/* Menu */}
           <nav className="flex-1 p-4 space-y-1">
             {menuItems.map((item) => {
               const Icon = item.icon
@@ -111,10 +107,10 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             })}
           </nav>
 
-          {/* Footer */}
+
           <div className="p-4 border-t border-gray-200 space-y-1">
             <Link
-              href="/configuracoes"
+              href="#"
               onClick={onClose}
               className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors"
             >

@@ -107,7 +107,6 @@ export function TurmasContent() {
         onCreate={handleCreate}
       />
 
-      {/* Dialog Criar/Editar */}
       <TurmaDialog
         open={dialogOpen}
         onOpenChange={setDialogOpen}
@@ -118,7 +117,7 @@ export function TurmasContent() {
         }}
       />
 
-      {/* Dialog Confirmar Exclusão */}
+
       <AlertDialog open={!!deletingTurma} onOpenChange={() => setDeletingTurma(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>

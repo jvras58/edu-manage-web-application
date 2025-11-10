@@ -117,19 +117,15 @@ export function Navbar({ onMenuClick }: NavbarProps) {
   return (
     <header className="sticky top-0 z-30 bg-white border-b border-gray-200">
       <div className="flex items-center justify-between px-4 py-3 lg:px-6">
-        {/* Menu mobile */}
         <Button variant="ghost" size="icon" onClick={onMenuClick} className="lg:hidden">
           <Menu className="h-6 w-6" />
         </Button>
 
-        {/* Título da página */}
         <div className="flex-1 lg:block hidden">
           <h2 className="text-xl font-semibold text-gray-900">Dashboard</h2>
         </div>
 
-        {/* Actions */}
         <div className="flex items-center gap-3">
-          {/* Notificações Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="relative">
@@ -212,7 +208,6 @@ export function Navbar({ onMenuClick }: NavbarProps) {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Avatar */}
           {user && (
             <div className="flex items-center gap-3">
               <Avatar className="h-9 w-9 bg-blue-600">
