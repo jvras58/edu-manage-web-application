@@ -14,15 +14,11 @@ type LoginFormState = {
   user?: UserPayload
 }
 
-/**
- * Server Action para login usando React 19 useActionState
- */
 export async function loginAction(
-  prevState: LoginFormState | null,
+  _prevState: LoginFormState | null,
   formData: FormData
 ): Promise<LoginFormState> {
   try {
-    // 1. Validar dados do formulário
     const rawData = {
       email: formData.get('email'),
       password: formData.get('password'),
@@ -39,7 +35,6 @@ export async function loginAction(
 
     const { email, password } = validatedFields.data
 
-    // 2. Buscar usuário no banco de dados
     const usuario = await prisma.usuario.findUnique({
       where: { email },
     })
@@ -51,7 +46,6 @@ export async function loginAction(
       }
     }
 
-    // 3. Verificar senha
     const senhaValida = await comparePassword(password, usuario.senha_hash)
 
     if (!senhaValida) {
@@ -61,7 +55,6 @@ export async function loginAction(
       }
     }
 
-    // 4. Criar payload do usuário
     const userPayload: UserPayload = {
       userId: usuario.id.toString(),
       email: usuario.email,
@@ -69,12 +62,10 @@ export async function loginAction(
       role: usuario.role as 'admin' | 'professor',
     }
 
-    // 5. Gerar token JWT
     const token = await generateToken(userPayload)
 
-    // 6. Configurar cookie seguro
     const cookieStore = await cookies()
-    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 horas
+    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000)
 
     cookieStore.set('auth-token', token, {
       httpOnly: true,
@@ -84,7 +75,6 @@ export async function loginAction(
       path: '/',
     })
 
-    // 7. Retornar sucesso com dados do usuário
     return {
       success: true,
       user: userPayload,
@@ -98,18 +88,12 @@ export async function loginAction(
   }
 }
 
-/**
- * Server Action para logout
- */
 export async function logoutAction(): Promise<void> {
   const cookieStore = await cookies()
   cookieStore.delete('auth-token')
   redirect('/login')
 }
 
-/**
- * Server Action para obter usuário atual
- */
 export async function getCurrentUserAction(): Promise<UserPayload | null> {
   try {
     const cookieStore = await cookies()

@@ -19,13 +19,10 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
   const { toast } = useToast()
   const setUser = useAuthStore((state) => state.setUser)
 
-  // React 19 useActionState hook
   const [state, formAction, isPending] = useActionState(loginAction, null)
 
-  // Efeito para tratar resposta da action
   useEffect(() => {
     if (state?.success && state.user) {
-      // Atualizar store global do Zustand
       setUser(state.user)
 
       toast({

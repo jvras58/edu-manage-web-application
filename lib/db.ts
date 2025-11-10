@@ -10,5 +10,4 @@ export const prisma =
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma
 
-// Types para o banco de dados
 export type { Usuario, Turma, Aluno, CriterioAvaliacao, Notificacao } from "@prisma/client"

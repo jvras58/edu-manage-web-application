@@ -72,12 +72,10 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { nome, disciplina, ano_letivo } = body
 
-    // Validação
     if (!nome || !disciplina || !ano_letivo) {
       return NextResponse.json({ error: "Nome, disciplina e ano letivo são obrigatórios" }, { status: 400 })
     }
 
-    // Criar turma e associar professor
     const turma = await prisma.turma.create({
       data: {
         nome,
@@ -91,7 +89,6 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    // Criar notificação
     await prisma.notificacao.create({
       data: {
         usuario_id: user.userId,

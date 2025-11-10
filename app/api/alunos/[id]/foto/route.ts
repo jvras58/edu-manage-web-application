@@ -18,19 +18,17 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       return NextResponse.json({ error: "Arquivo não enviado" }, { status: 400 })
     }
 
-    // Validar tipo de arquivo
     if (!file.type.startsWith("image/")) {
       return NextResponse.json({ error: "Apenas imagens são permitidas" }, { status: 400 })
     }
 
-    // Upload para Vercel Blob
     const blob = await put(`alunos/${id}-${file.name}`, file, {
       access: "public",
     })
 
     return NextResponse.json({ url: blob.url })
   } catch (error) {
-    console.error("  Upload foto error:", error)
+    console.error("Upload foto error:", error)
     return NextResponse.json({ error: "Erro ao fazer upload da foto" }, { status: 500 })
   }
 }

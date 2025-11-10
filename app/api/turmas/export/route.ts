@@ -2,14 +2,13 @@ import { type NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
 import { getCurrentUser } from "@/lib/auth"
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const user = await getCurrentUser()
     if (!user) {
       return NextResponse.json({ error: "Não autorizado" }, { status: 401 })
     }
 
-    // Busca turmas do professor com contagem de alunos
     const turmas = await prisma.turma.findMany({
       where: {
         professor_turmas: {
@@ -35,7 +34,6 @@ export async function GET(request: NextRequest) {
       },
     })
 
-    // Gera CSV
     const headers = ["Nome", "Disciplina", "Ano Letivo", "Total Alunos", "Total Critérios", "Data de Criação"]
     const rows = turmas.map((turma) => [
       turma.nome,
@@ -59,7 +57,7 @@ export async function GET(request: NextRequest) {
       },
     })
   } catch (error) {
-    console.error("  Export error:", error)
+    console.error("Export error:", error)
     return NextResponse.json({ error: "Erro ao exportar dados" }, { status: 500 })
   }
 }

@@ -50,7 +50,6 @@ export function Navbar({ onMenuClick }: NavbarProps) {
     fetchUser()
     fetchNotificacoes()
 
-    // Atualiza notificações a cada 30 segundos
     const interval = setInterval(fetchNotificacoes, 30000)
     return () => clearInterval(interval)
   }, [])

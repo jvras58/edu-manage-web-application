@@ -12,7 +12,6 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
     const { id } = await params
 
-    // Verificar se turma pertence ao professor
     const turma = await prisma.turma.findFirst({
       where: {
         id,
@@ -33,7 +32,6 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       orderBy: { created_at: "asc" },
     })
 
-    // Calcular soma dos pesos
     const somaPesos = criterios.reduce((sum, c) => sum + Number(c.peso), 0)
 
     return NextResponse.json({
@@ -42,7 +40,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       somaPesos,
     })
   } catch (error) {
-    console.error("  Get criterios error:", error)
+    console.error("Get criterios error:", error)
     return NextResponse.json({ error: "Erro ao obter critérios" }, { status: 500 })
   }
 }
@@ -59,7 +57,6 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     const body = await request.json()
     const { nome, peso, descricao } = body
 
-    // Validação
     if (!nome || peso === undefined || peso === null) {
       return NextResponse.json({ error: "Nome e peso são obrigatórios" }, { status: 400 })
     }
@@ -68,7 +65,6 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       return NextResponse.json({ error: "Peso deve estar entre 0 e 100" }, { status: 400 })
     }
 
-    // Verificar se turma pertence ao professor
     const turma = await prisma.turma.findFirst({
       where: {
         id,
@@ -84,7 +80,6 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       return NextResponse.json({ error: "Turma não encontrada" }, { status: 404 })
     }
 
-    // Verificar se soma dos pesos não ultrapassa 100
     const criteriosExistentes = await prisma.criterioAvaliacao.findMany({
       where: { turma_id: id },
     })
@@ -100,7 +95,6 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       )
     }
 
-    // Criar critério
     const criterio = await prisma.criterioAvaliacao.create({
       data: {
         turma_id: id,
@@ -110,7 +104,6 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       },
     })
 
-    // Criar notificação
     await prisma.notificacao.create({
       data: {
         usuario_id: user.userId,
@@ -121,7 +114,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
     return NextResponse.json({ criterio })
   } catch (error) {
-    console.error("  Create criterio error:", error)
+    console.error("Create criterio error:", error)
     return NextResponse.json({ error: "Erro ao criar critério" }, { status: 500 })
   }
 }

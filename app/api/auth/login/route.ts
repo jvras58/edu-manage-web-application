@@ -9,15 +9,12 @@ export async function POST(request: NextRequest) {
     try {
       body = await request.json()
     } catch (parseError) {
-      console.error("  JSON parse error:", parseError)
+      console.error("JSON parse error:", parseError)
       return NextResponse.json({ error: "Dados inválidos" }, { status: 400 })
     }
 
     const { email, password } = body
 
-    console.log("  Login attempt for email:", email)
-
-    // Validação básica
     if (!email || !password) {
       return NextResponse.json({ error: "Email e senha são obrigatórios" }, { status: 400 })
     }
@@ -26,29 +23,21 @@ export async function POST(request: NextRequest) {
       where: { email },
     })
 
-    console.log("  Found user:", usuario)
-
     if (!usuario) {
       return NextResponse.json({ error: "Credenciais inválidas" }, { status: 401 })
     }
 
-    console.log("  Verifying password...")
-    // Verifica a senha
     const senhaValida = await comparePassword(password, usuario.senha_hash)
-
-    console.log("  Password valid:", senhaValida)
 
     if (!senhaValida) {
       return NextResponse.json({ error: "Credenciais inválidas" }, { status: 401 })
     }
 
-    // Valida e converte o role
     const role = usuario.role as "admin" | "professor"
     if (role !== "admin" && role !== "professor") {
       return NextResponse.json({ error: "Tipo de usuário inválido" }, { status: 401 })
     }
 
-    // Gera token JWT
     const token = await generateToken({
       userId: usuario.id,
       email: usuario.email,
@@ -56,10 +45,8 @@ export async function POST(request: NextRequest) {
       role: role,
     })
 
-    // Define cookie
-    await setTokenCookie(token)
 
-    console.log("  Login successful for:", usuario.email)
+    await setTokenCookie(token)
 
     return NextResponse.json(
       {

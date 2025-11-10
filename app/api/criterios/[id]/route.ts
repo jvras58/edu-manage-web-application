@@ -14,7 +14,6 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     const body = await request.json()
     const { nome, peso, descricao } = body
 
-    // Validação
     if (!nome || peso === undefined || peso === null) {
       return NextResponse.json({ error: "Nome e peso são obrigatórios" }, { status: 400 })
     }
@@ -23,7 +22,6 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: "Peso deve estar entre 0 e 100" }, { status: 400 })
     }
 
-    // Buscar critério atual
     const criterioAtual = await prisma.criterioAvaliacao.findFirst({
       where: {
         id,
@@ -44,7 +42,6 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: "Critério não encontrado" }, { status: 404 })
     }
 
-    // Verificar se nova soma dos pesos não ultrapassa 100
     const outrosCriterios = await prisma.criterioAvaliacao.findMany({
       where: {
         turma_id: criterioAtual.turma_id,
@@ -65,7 +62,6 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       )
     }
 
-    // Atualizar critério
     const criterio = await prisma.criterioAvaliacao.update({
       where: { id },
       data: {
@@ -85,12 +81,12 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
     return NextResponse.json({ criterio })
   } catch (error) {
-    console.error("  Update criterio error:", error)
+    console.error("Update criterio error:", error)
     return NextResponse.json({ error: "Erro ao atualizar critério" }, { status: 500 })
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const user = await getCurrentUser()
 
@@ -100,7 +96,6 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
 
     const { id } = await params
 
-    // Buscar critério
     const criterio = await prisma.criterioAvaliacao.findFirst({
       where: {
         id,
@@ -121,12 +116,10 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
       return NextResponse.json({ error: "Critério não encontrado" }, { status: 404 })
     }
 
-    // Deletar critério
     await prisma.criterioAvaliacao.delete({
       where: { id },
     })
 
-    // Criar notificação
     await prisma.notificacao.create({
       data: {
         usuario_id: user.userId,
@@ -137,7 +130,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error("  Delete criterio error:", error)
+    console.error("Delete criterio error:", error)
     return NextResponse.json({ error: "Erro ao deletar critério" }, { status: 500 })
   }
 }

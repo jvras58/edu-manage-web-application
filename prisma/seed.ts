@@ -202,7 +202,7 @@ async function main() {
     }
   })
 
-  console.log('Seed data inserted successfully!')
+  console.log('Seed completed!')
 }
 
 main()
