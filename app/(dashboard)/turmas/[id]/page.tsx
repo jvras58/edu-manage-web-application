@@ -124,7 +124,7 @@ export default function TurmaDetalhesPage({
             </div>
             <div>
               <p className="text-sm text-gray-600">Total de Alunos</p>
-              <p className="text-2xl font-bold text-gray-900">{Number.parseInt(turma.total_alunos)}</p>
+              <p className="text-2xl font-bold text-gray-900">{(turma.total_alunos)}</p>
             </div>
           </div>
         </Card>
@@ -135,7 +135,7 @@ export default function TurmaDetalhesPage({
             </div>
             <div>
               <p className="text-sm text-gray-600">Critérios Configurados</p>
-              <p className="text-2xl font-bold text-gray-900">{Number.parseInt(turma.total_criterios)}</p>
+              <p className="text-2xl font-bold text-gray-900">{(turma.total_criterios)}</p>
             </div>
           </div>
         </Card>
@@ -174,7 +174,7 @@ export default function TurmaDetalhesPage({
                   <p className="font-medium text-gray-900">{criterio.nome}</p>
                   {criterio.descricao && <p className="text-sm text-gray-600">{criterio.descricao}</p>}
                 </div>
-                <Badge>{Number.parseFloat(criterio.peso).toFixed(0)}%</Badge>
+                <Badge>{(criterio.peso).toFixed(0)}%</Badge>
               </div>
             ))}
           </div>
