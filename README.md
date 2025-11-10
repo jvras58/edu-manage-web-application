@@ -1,64 +1,99 @@
-### Explicação sobre o Projeto EduManage
+# EduManage 📚
 
-O **EduManage** é uma aplicação web para gerenciamento educacional, desenvolvida com **Next.js** (framework React), **Prisma** (ORM para banco de dados), **PostgreSQL** (via Neon, um serviço de banco de dados na nuvem), e bibliotecas como **Radix UI** e **Tailwind CSS** para a interface. O sistema permite gerenciar usuários (admins e professores), turmas, alunos, critérios de avaliação e notificações. É estruturado em uma arquitetura full-stack com API routes no Next.js, autenticação via JWT, e um banco relacional para persistência de dados.
+[![Node.js](https://img.shields.io/badge/Node.js-18+-green)](https://nodejs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-14+-black)](https://nextjs.org/)
+[![Prisma](https://img.shields.io/badge/Prisma-5+-blue)](https://prisma.io/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon-orange)](https://neon.tech/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3+-38B2AC)](https://tailwindcss.com/)
 
-O projeto inclui:
-- **Frontend**: Páginas para dashboard, alunos, turmas, critérios e notificações, com componentes reutilizáveis (shadcn/ui).
-- **Backend**: APIs RESTful para CRUD de entidades, autenticação e upload de fotos.
-- **Banco**: Schema Prisma com modelos para `Usuario`, `Turma`, `Aluno`, `CriterioAvaliacao`, etc., e dados de seed para testes.
+Uma aplicação web completa para gerenciamento educacional, desenvolvida com tecnologias modernas para facilitar a administração de instituições de ensino.
 
-### Como Rodar Localmente Usando o Banco do Neon
+## ✨ Sobre o Projeto
 
-O banco já está configurado no arquivo .env com a URL do Neon (`DATABASE_URL`). Certifique-se de que o Neon esteja ativo e acessível (você pode verificar no painel do Neon se a conexão está ok). Aqui vão os passos:
+O **EduManage** é uma plataforma full-stack que permite gerenciar usuários (admins e professores), turmas, alunos, critérios de avaliação e notificações de forma eficiente. Construída com **Next.js** para o frontend e backend, **Prisma** como ORM, **PostgreSQL** hospedado no Neon, e uma interface elegante usando **Radix UI** e **Tailwind CSS**.
 
-1. **Instalar Dependências**:
-   - Certifique-se de ter o **Node.js** (versão 18+), **pnpm** (gerenciador de pacotes) e **Git** instalados.
-   - Clone o repositório (se ainda não fez): `git clone <url-do-repo>`.
-   - Navegue para a pasta: `cd edu-manage-web-application`.
-   - Instale as dependências: `pnpm install`. Isso também executa `prisma generate` automaticamente (graças ao `postinstall` no package.json).
+### 🚀 Funcionalidades Principais
 
-2. **Configurar o Banco**:
-   - O .env já tem a `DATABASE_URL` apontando para o Neon. Se precisar alterar, edite o arquivo .env (não commite mudanças sensíveis).
-   - Verifique se o banco está acessível: você pode testar com uma ferramenta como `psql` ou via Prisma.
+- **👥 Gerenciamento de Usuários**: Admins e professores com autenticação JWT.
+- **🏫 Turmas e Alunos**: CRUD completo para turmas e alunos, incluindo upload de fotos.
+- **📊 Critérios de Avaliação**: Definição e gerenciamento de critérios educacionais.
+- **🔔 Notificações**: Sistema de notificações para manter todos informados.
+- **📈 Dashboard**: Estatísticas e visão geral do sistema.
 
-3. **Rodar o Projeto**:
-   - Execute o servidor de desenvolvimento: `pnpm run dev`. Isso inicia o Next.js na porta 3000 (ou a configurada).
-   - Se houver erros (como o que apareceu no terminal com exit code 1), provavelmente é porque o banco não está sincronizado. Continue para os comandos do Prisma abaixo.
+### 🏗️ Arquitetura
 
-4. **Acessar a Aplicação**:
-   - Abra o navegador em `http://localhost:3000`.
-   - Faça login com credenciais do seed: email `admin@edumanage.com` ou `maria.silva@edumanage.com`, senha `123456`.
+- **Frontend**: Páginas responsivas com componentes reutilizáveis (shadcn/ui).
+- **Backend**: APIs RESTful no Next.js para operações CRUD e autenticação.
+- **Banco de Dados**: Schema Prisma com modelos relacionais e dados de seed para testes.
 
-### Comandos do Prisma para Sincronizar e Rodar o Seed
+## 🛠️ Como Rodar Localmente
 
-O Prisma gerencia o banco: migrações aplicam mudanças no schema, e o seed popula dados iniciais. Use estes comandos na raiz do projeto:
+### Pré-requisitos
 
-- **Gerar o Cliente Prisma** (já feito no `postinstall`, mas se precisar manualmente):
-  ```
-  pnpm prisma generate
-  ```
-  Isso cria o cliente TypeScript para interagir com o banco.
+- **Node.js** (versão 18 ou superior)
+- **pnpm** (gerenciador de pacotes)
+- **Git**
+- Conta no **Neon** para o banco PostgreSQL (já configurado no `.env`)
 
-- **Aplicar Migrações (Sincronizar Schema)**:
-  ```
-  pnpm prisma migrate dev
-  ```
-  - Isso aplica as migrações pendentes (no caso, a migração `20251109050017_init` já existe).
-  - Use `--name <nome>` se criar uma nova migração (ex.: `pnpm prisma migrate dev --name nova_migracao`).
-  - Para produção: `pnpm prisma migrate deploy`.
+### Passos para Instalação
 
-- **Rodar o Seed (Popular Dados Iniciais)**:
-  ```
-  pnpm prisma db seed
-  ```
-  - Isso executa o script seed.ts, criando usuários, turmas, alunos, etc., com senha padrão `123456`.
-  - O seed inclui 1 admin, 2 professores, 3 turmas, 5 alunos, critérios de avaliação e notificações.
+1. **Clone o repositório**:
+   ```bash
+   git clone <url-do-repo>
+   cd edu-manage-web-application
+   ```
 
-- **Outros Comandos Úteis**:
-  - Ver status das migrações: `pnpm prisma migrate status`.
-  - Resetar banco (desenvolvimento): `pnpm prisma migrate reset` (cuidado, apaga dados).
-  - Abrir Prisma Studio (interface visual para o banco): `pnpm prisma studio` (abre em `http://localhost:5555`).
+2. **Instale as dependências**:
+   ```bash
+   pnpm install
+   ```
+   > Isso executa automaticamente `prisma generate` via `postinstall`.
 
-Se o `pnpm run dev` ainda falhar após esses passos, verifique logs de erro (provavelmente relacionados ao banco) e certifique-se de que o Neon está online. Se precisar de ajuda com erros específicos, compartilhe os logs!
+3. **Configure o banco**:
+   - Verifique se o `.env` tem a `DATABASE_URL` correta para o Neon.
+   - Teste a conexão se necessário.
 
-npx tsc --noEmit --project tsconfig.json
+4. **Sincronize o banco**:
+   ```bash
+   pnpm prisma migrate dev
+   pnpm prisma db seed
+   ```
+
+5. **Execute o projeto**:
+   ```bash
+   pnpm run dev
+   ```
+
+6. **Acesse a aplicação**:
+   - Abra [http://localhost:3000](http://localhost:3000)
+   - Login: `admin@edumanage.com` ou `maria.silva@edumanage.com`
+   - Senha: `123456`
+
+## 📋 Comandos Úteis do Prisma
+
+- **Gerar cliente Prisma**: `pnpm prisma generate`
+- **Aplicar migrações**: `pnpm prisma migrate dev`
+- **Rodar seed**: `pnpm prisma db seed`
+- **Ver status**: `pnpm prisma migrate status`
+- **Resetar banco (dev)**: `pnpm prisma migrate reset`
+- **Abrir Prisma Studio**: `pnpm prisma studio` (http://localhost:5555)
+
+## 📁 Estrutura do Projeto
+
+```
+edu-manage-web-application/
+├── app/                 # Páginas Next.js (App Router)
+├── components/          # Componentes reutilizáveis
+├── lib/                 # Utilitários e configurações
+├── prisma/              # Schema e migrações do banco
+├── public/              # Assets estáticos
+└── docs/                # Documentação adicional
+```
+
+## 🤝 Contribuição
+
+Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou pull requests.
+
+## 📄 Licença
+
+Este projeto está sob a licença MIT.
