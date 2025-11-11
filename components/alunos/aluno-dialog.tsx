@@ -34,16 +34,7 @@ import {
   type Aluno,
 } from '@/modules/dashboard/alunos/schemas/aluno.schema';
 
-const formSchema = z.object({
-  nome: z.string().min(1, 'Nome é obrigatório'),
-  matricula: z.string().min(1, 'Matrícula é obrigatória'),
-  email: z.string().email('Email inválido').nullable().or(z.literal('')),
-  foto_url: z.string().url().nullable().or(z.literal('')),
-  status: z.enum(['ativo', 'inativo', 'trancado']),
-  turmas: z.array(z.string()),
-});
-
-type FormData = z.infer<typeof formSchema>;
+type FormData = z.input<typeof createAlunoSchema>;
 
 interface Turma {
   id: string;
@@ -69,7 +60,7 @@ export function AlunoDialog({
   const { toast } = useToast();
 
   const form = useForm<FormData>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(createAlunoSchema),
     defaultValues: {
       nome: '',
       matricula: '',
@@ -186,7 +177,7 @@ export function AlunoDialog({
   };
 
   const toggleTurma = (turmaId: string) => {
-    const currentTurmas = form.getValues('turmas');
+    const currentTurmas = form.getValues('turmas') || [];
     const newTurmas = currentTurmas.includes(turmaId)
       ? currentTurmas.filter((id) => id !== turmaId)
       : [...currentTurmas, turmaId];
@@ -194,7 +185,11 @@ export function AlunoDialog({
   };
 
   const onSubmit = (data: FormData) => {
-    saveMutation.mutate(data as CreateAlunoInput);
+    const submitData: CreateAlunoInput = {
+      ...data,
+      turmas: data.turmas || [],
+    };
+    saveMutation.mutate(submitData);
   };
 
   const getInitials = (name: string) => {
@@ -350,7 +345,7 @@ export function AlunoDialog({
                     <Badge
                       key={turma.id}
                       variant={
-                        field.value.includes(turma.id) ? 'default' : 'outline'
+                        (field.value || []).includes(turma.id) ? 'default' : 'outline'
                       }
                       className="cursor-pointer"
                       onClick={() => toggleTurma(turma.id)}
