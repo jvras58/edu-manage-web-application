@@ -236,7 +236,9 @@ export function Navbar({ onMenuClick }: NavbarProps) {
                 </AvatarFallback>
               </Avatar>
               <div className="hidden md:block">
-                <p className="text-sm font-medium text-foreground">{user.nome}</p>
+                <p className="text-sm font-medium text-foreground">
+                  {user.nome}
+                </p>
                 <p className="text-xs text-muted-foreground">{user.email}</p>
               </div>
             </div>

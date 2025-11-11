@@ -98,7 +98,9 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
               </div>
               <div>
                 <h1 className="text-xl font-bold text-foreground">EduManage</h1>
-                <p className="text-xs text-muted-foreground">Portal do Professor</p>
+                <p className="text-xs text-muted-foreground">
+                  Portal do Professor
+                </p>
               </div>
             </Link>
           </div>

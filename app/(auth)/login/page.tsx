@@ -18,12 +18,16 @@ export default function LoginPage() {
               </div>
             </div>
             <h1 className="text-3xl font-bold text-foreground">EduManage</h1>
-            <p className="text-muted-foreground text-balance">Portal do Professor</p>
+            <p className="text-muted-foreground text-balance">
+              Portal do Professor
+            </p>
           </div>
           <LoginForm />
 
           <div className="pt-4 border-t text-center space-y-2">
-            <p className="text-sm text-muted-foreground">Contas de demonstração:</p>
+            <p className="text-sm text-muted-foreground">
+              Contas de demonstração:
+            </p>
             <div className="text-xs text-muted-foreground space-y-1">
               <p>Admin: admin@edumanage.com</p>
               <p>Professor: maria.silva@edumanage.com</p>

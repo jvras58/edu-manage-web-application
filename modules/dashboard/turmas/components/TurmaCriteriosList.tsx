@@ -18,7 +18,18 @@ import {
 } from '@/components/ui/alert-dialog';
 
 export function TurmaCriteriosList() {
-  const { criterios, setDialogOpen, dialogOpen, editingCriterio, setEditingCriterio, setDeletingCriterio, deletingCriterio, handleDelete, fetchCriterios, pesoDisponivel } = useCriteriosTurma();
+  const {
+    criterios,
+    setDialogOpen,
+    dialogOpen,
+    editingCriterio,
+    setEditingCriterio,
+    setDeletingCriterio,
+    deletingCriterio,
+    handleDelete,
+    fetchCriterios,
+    pesoDisponivel,
+  } = useCriteriosTurma();
   const { turma } = useTurmaDetalhes();
 
   const handleEdit = (criterio: any) => {
@@ -87,7 +98,11 @@ export function TurmaCriteriosList() {
         onOpenChange={setDialogOpen}
         criterio={editingCriterio}
         turmaId={turma?.id || ''}
-        pesoDisponivel={editingCriterio ? pesoDisponivel + editingCriterio.peso : pesoDisponivel}
+        pesoDisponivel={
+          editingCriterio
+            ? pesoDisponivel + editingCriterio.peso
+            : pesoDisponivel
+        }
         onSuccess={() => {
           fetchCriterios();
           setDialogOpen(false);
