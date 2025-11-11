@@ -24,8 +24,8 @@ export function StatsCard({
     <Card className={cn('p-6', className)}>
       <div className="flex items-center justify-between">
         <div className="space-y-2">
-          <p className="text-sm font-medium text-gray-600">{title}</p>
-          <p className="text-3xl font-bold text-gray-900">{value}</p>
+          <p className="text-sm font-medium text-muted-foreground">{title}</p>
+          <p className="text-3xl font-bold text-foreground">{value}</p>
           {trend && (
             <p
               className={cn(
@@ -38,8 +38,8 @@ export function StatsCard({
             </p>
           )}
         </div>
-        <div className="bg-blue-50 p-3 rounded-lg">
-          <Icon className="h-6 w-6 text-blue-600" />
+        <div className="bg-primary/10 p-3 rounded-lg">
+          <Icon className="h-6 w-6 text-primary" />
         </div>
       </div>
     </Card>
