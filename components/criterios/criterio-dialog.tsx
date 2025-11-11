@@ -1,8 +1,9 @@
 'use client';
 
-import type React from 'react';
-
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import {
   Dialog,
   DialogContent,
@@ -16,6 +17,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
+import { criterioSchema, FormData } from '@/modules/dashboard/criterios/schemas/criterio.schema';
 
 interface Criterio {
   id: string;
@@ -42,41 +44,42 @@ export function CriterioDialog({
   onSuccess,
 }: CriterioDialogProps) {
   const { toast } = useToast();
-  const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    nome: '',
-    peso: '',
-    descricao: '',
+
+  const form = useForm<FormData>({
+    resolver: zodResolver(criterioSchema),
+    defaultValues: {
+      nome: '',
+      peso: 0,
+      descricao: '',
+    },
   });
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = form;
 
   useEffect(() => {
     if (criterio) {
-      setFormData({
+      reset({
         nome: criterio.nome,
-        peso: criterio.peso.toString(),
+        peso: criterio.peso,
         descricao: criterio.descricao || '',
       });
     } else {
-      setFormData({
+      reset({
         nome: '',
-        peso: '',
+        peso: 0,
         descricao: '',
       });
     }
-  }, [criterio, open]);
+  }, [criterio, open, reset]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      const peso = Number.parseFloat(formData.peso);
-
-      if (isNaN(peso) || peso < 0 || peso > 100) {
-        throw new Error('Peso deve ser um número entre 0 e 100');
-      }
-
-      if (!criterio && peso > pesoDisponivel) {
+  const saveMutation = useMutation({
+    mutationFn: async (data: FormData) => {
+      if (!criterio && data.peso > pesoDisponivel) {
         throw new Error(
           `Peso excede o disponível. Máximo: ${pesoDisponivel.toFixed(0)}%`
         );
@@ -91,32 +94,37 @@ export function CriterioDialog({
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          nome: formData.nome,
-          peso,
-          descricao: formData.descricao || null,
+          nome: data.nome,
+          peso: data.peso,
+          descricao: data.descricao || null,
         }),
       });
 
       if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Erro ao salvar critério');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Erro ao salvar critério');
       }
 
+      return response.json();
+    },
+    onSuccess: (_, data) => {
       toast({
         title: criterio ? 'Critério atualizado!' : 'Critério criado!',
-        description: `O critério "${formData.nome}" foi ${criterio ? 'atualizado' : 'adicionado'} com sucesso.`,
+        description: `O critério "${data.nome}" foi ${criterio ? 'atualizado' : 'adicionado'} com sucesso.`,
       });
-
       onSuccess();
-    } catch (error) {
+    },
+    onError: (error) => {
       toast({
         title: 'Erro ao salvar critério',
         description: error instanceof Error ? error.message : 'Tente novamente',
         variant: 'destructive',
       });
-    } finally {
-      setLoading(false);
-    }
+    },
+  });
+
+  const onSubmit = (data: FormData) => {
+    saveMutation.mutate(data);
   };
 
   return (
@@ -128,19 +136,18 @@ export function CriterioDialog({
           </DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="nome">Nome do Critério *</Label>
             <Input
               id="nome"
               placeholder="Ex: Provas, Trabalhos, Participação"
-              value={formData.nome}
-              onChange={(e) =>
-                setFormData({ ...formData, nome: e.target.value })
-              }
-              required
-              disabled={loading}
+              {...register('nome')}
+              disabled={isSubmitting}
             />
+            {errors.nome && (
+              <p className="text-sm text-red-600">{errors.nome.message}</p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -155,13 +162,12 @@ export function CriterioDialog({
               max="100"
               step="0.01"
               placeholder="Ex: 30"
-              value={formData.peso}
-              onChange={(e) =>
-                setFormData({ ...formData, peso: e.target.value })
-              }
-              required
-              disabled={loading}
+              {...register('peso', { valueAsNumber: true })}
+              disabled={isSubmitting}
             />
+            {errors.peso && (
+              <p className="text-sm text-red-600">{errors.peso.message}</p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -169,13 +175,13 @@ export function CriterioDialog({
             <Textarea
               id="descricao"
               placeholder="Descreva como este critério será avaliado..."
-              value={formData.descricao}
-              onChange={(e) =>
-                setFormData({ ...formData, descricao: e.target.value })
-              }
-              disabled={loading}
+              {...register('descricao')}
+              disabled={isSubmitting}
               rows={3}
             />
+            {errors.descricao && (
+              <p className="text-sm text-red-600">{errors.descricao.message}</p>
+            )}
           </div>
 
           <DialogFooter>
@@ -183,16 +189,16 @@ export function CriterioDialog({
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
-              disabled={loading}
+              disabled={isSubmitting}
             >
               Cancelar
             </Button>
             <Button
               type="submit"
               className="bg-primary hover:bg-primary/90"
-              disabled={loading}
+              disabled={isSubmitting}
             >
-              {loading ? (
+              {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Salvando...
