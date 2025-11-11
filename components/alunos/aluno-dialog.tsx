@@ -2,7 +2,11 @@
 
 import type React from 'react';
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useMutation } from '@tanstack/react-query';
 import {
   Dialog,
   DialogContent,
@@ -24,16 +28,22 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2, Upload, X } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
+import {
+  createAlunoSchema,
+  type CreateAlunoInput,
+  type Aluno,
+} from '@/modules/dashboard/alunos/schemas/aluno.schema';
 
-interface Aluno {
-  id: string;
-  nome: string;
-  matricula: string;
-  email: string | null;
-  foto_url: string | null;
-  status: string;
-  turmas?: Array<{ turma_id: string }>;
-}
+const formSchema = z.object({
+  nome: z.string().min(1, 'Nome é obrigatório'),
+  matricula: z.string().min(1, 'Matrícula é obrigatória'),
+  email: z.string().email('Email inválido').nullable().or(z.literal('')),
+  foto_url: z.string().url().nullable().or(z.literal('')),
+  status: z.enum(['ativo', 'inativo', 'trancado']),
+  turmas: z.array(z.string()),
+});
+
+type FormData = z.infer<typeof formSchema>;
 
 interface Turma {
   id: string;
@@ -57,116 +67,134 @@ export function AlunoDialog({
   onSuccess,
 }: AlunoDialogProps) {
   const { toast } = useToast();
-  const [loading, setLoading] = useState(false);
-  const [uploading, setUploading] = useState(false);
-  const [formData, setFormData] = useState({
-    nome: '',
-    matricula: '',
-    email: '',
-    foto_url: '',
-    status: 'ativo',
-    turma_ids: [] as string[],
+
+  const form = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      nome: '',
+      matricula: '',
+      email: '',
+      foto_url: '',
+      status: 'ativo',
+      turmas: [],
+    },
   });
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    watch,
+    reset,
+    formState: { errors, isSubmitting },
+  } = form;
+
+  const fotoUrl = watch('foto_url');
 
   useEffect(() => {
     if (aluno) {
-      setFormData({
+      reset({
         nome: aluno.nome,
         matricula: aluno.matricula,
         email: aluno.email || '',
         foto_url: aluno.foto_url || '',
         status: aluno.status,
-        turma_ids: aluno.turmas?.map((t) => t.turma_id) || [],
+        turmas: aluno.turmas?.map((t) => t.turma_id) || [],
       });
     } else {
-      setFormData({
+      reset({
         nome: '',
         matricula: '',
         email: '',
         foto_url: '',
         status: 'ativo',
-        turma_ids: [],
+        turmas: [],
       });
     }
-  }, [aluno, open]);
+  }, [aluno, open, reset]);
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setUploading(true);
-
-    try {
-      const formDataUpload = new FormData();
-      formDataUpload.append('file', file);
+  const uploadMutation = useMutation({
+    mutationFn: async (file: File) => {
+      const formData = new FormData();
+      formData.append('file', file);
 
       const tempId = aluno?.id || 'temp-' + Date.now();
       const response = await fetch(`/api/alunos/${tempId}/foto`, {
         method: 'POST',
-        body: formDataUpload,
+        body: formData,
       });
 
       if (!response.ok) throw new Error('Erro ao fazer upload');
 
       const data = await response.json();
-      setFormData({ ...formData, foto_url: data.url });
-
+      return data.url as string;
+    },
+    onSuccess: (url) => {
+      setValue('foto_url', url);
       toast({
         title: 'Foto enviada com sucesso!',
       });
-    } catch (error) {
+    },
+    onError: () => {
       toast({
         title: 'Erro ao enviar foto',
         variant: 'destructive',
       });
-    } finally {
-      setUploading(false);
-    }
-  };
+    },
+  });
 
-  const toggleTurma = (turmaId: string) => {
-    setFormData({
-      ...formData,
-      turma_ids: formData.turma_ids.includes(turmaId)
-        ? formData.turma_ids.filter((id) => id !== turmaId)
-        : [...formData.turma_ids, turmaId],
-    });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
+  const saveMutation = useMutation({
+    mutationFn: async (data: CreateAlunoInput) => {
       const url = aluno ? `/api/alunos/${aluno.id}` : '/api/alunos';
       const method = aluno ? 'PUT' : 'POST';
 
       const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(data),
       });
 
       if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Erro ao salvar aluno');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Erro ao salvar aluno');
       }
 
+      return response.json();
+    },
+    onSuccess: () => {
       toast({
         title: aluno ? 'Aluno atualizado!' : 'Aluno criado!',
-        description: `${formData.nome} foi ${aluno ? 'atualizado' : 'cadastrado'} com sucesso.`,
+        description: `${form.getValues('nome')} foi ${aluno ? 'atualizado' : 'cadastrado'} com sucesso.`,
       });
-
       onSuccess();
-    } catch (error) {
+    },
+    onError: (error) => {
       toast({
         title: 'Erro ao salvar aluno',
         description: error instanceof Error ? error.message : 'Tente novamente',
         variant: 'destructive',
       });
-    } finally {
-      setLoading(false);
+    },
+  });
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      uploadMutation.mutate(file);
     }
+  };
+
+  const toggleTurma = (turmaId: string) => {
+    const currentTurmas = form.getValues('turmas');
+    const newTurmas = currentTurmas.includes(turmaId)
+      ? currentTurmas.filter((id) => id !== turmaId)
+      : [...currentTurmas, turmaId];
+    setValue('turmas', newTurmas);
+  };
+
+  const onSubmit = (data: FormData) => {
+    saveMutation.mutate(data as CreateAlunoInput);
   };
 
   const getInitials = (name: string) => {
@@ -185,39 +213,52 @@ export function AlunoDialog({
           <DialogTitle>{aluno ? 'Editar Aluno' : 'Novo Aluno'}</DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="flex items-center gap-4">
             <Avatar className="h-20 w-20">
-              <AvatarImage src={formData.foto_url || undefined} />
+              <AvatarImage src={fotoUrl || undefined} />
               <AvatarFallback className="bg-blue-100 text-blue-700 text-xl">
-                {formData.nome ? getInitials(formData.nome) : '??'}
+                {form.getValues('nome')
+                  ? getInitials(form.getValues('nome'))
+                  : '??'}
               </AvatarFallback>
             </Avatar>
             <div className="flex-1">
               <Label htmlFor="foto" className="cursor-pointer">
                 <div className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700">
-                  {uploading ? (
+                  {uploadMutation.isPending ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
                     <Upload className="h-4 w-4" />
                   )}
-                  <span>{uploading ? 'Enviando...' : 'Enviar foto'}</span>
+                  <span>
+                    {uploadMutation.isPending ? 'Enviando...' : 'Enviar foto'}
+                  </span>
                 </div>
               </Label>
-              <Input
-                id="foto"
-                type="file"
-                accept="image/*"
-                onChange={handleFileUpload}
-                disabled={uploading}
-                className="hidden"
+              <Controller
+                name="foto_url"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    id="foto"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      handleFileUpload(e);
+                      field.onChange(e.target.files?.[0] ? 'uploading' : '');
+                    }}
+                    disabled={uploadMutation.isPending}
+                    className="hidden"
+                  />
+                )}
               />
-              {formData.foto_url && (
+              {fotoUrl && (
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
-                  onClick={() => setFormData({ ...formData, foto_url: '' })}
+                  onClick={() => setValue('foto_url', '')}
                   className="mt-1 text-red-600"
                 >
                   <X className="h-4 w-4 mr-1" />
@@ -233,13 +274,12 @@ export function AlunoDialog({
               <Input
                 id="nome"
                 placeholder="Ex: João Silva Santos"
-                value={formData.nome}
-                onChange={(e) =>
-                  setFormData({ ...formData, nome: e.target.value })
-                }
-                required
-                disabled={loading}
+                {...register('nome')}
+                disabled={isSubmitting}
               />
+              {errors.nome && (
+                <p className="text-sm text-red-600">{errors.nome.message}</p>
+              )}
             </div>
 
             <div className="space-y-2 col-span-2 sm:col-span-1">
@@ -247,13 +287,14 @@ export function AlunoDialog({
               <Input
                 id="matricula"
                 placeholder="Ex: 2024001"
-                value={formData.matricula}
-                onChange={(e) =>
-                  setFormData({ ...formData, matricula: e.target.value })
-                }
-                required
-                disabled={loading}
+                {...register('matricula')}
+                disabled={isSubmitting}
               />
+              {errors.matricula && (
+                <p className="text-sm text-red-600">
+                  {errors.matricula.message}
+                </p>
+              )}
             </div>
           </div>
 
@@ -263,52 +304,63 @@ export function AlunoDialog({
               id="email"
               type="email"
               placeholder="aluno@email.com"
-              value={formData.email}
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
-              disabled={loading}
+              {...register('email')}
+              disabled={isSubmitting}
             />
+            {errors.email && (
+              <p className="text-sm text-red-600">{errors.email.message}</p>
+            )}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="status">Status</Label>
-            <Select
-              value={formData.status}
-              onValueChange={(value) =>
-                setFormData({ ...formData, status: value })
-              }
-              disabled={loading}
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="ativo">Ativo</SelectItem>
-                <SelectItem value="inativo">Inativo</SelectItem>
-                <SelectItem value="trancado">Trancado</SelectItem>
-              </SelectContent>
-            </Select>
+            <Controller
+              name="status"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  disabled={isSubmitting}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="ativo">Ativo</SelectItem>
+                    <SelectItem value="inativo">Inativo</SelectItem>
+                    <SelectItem value="trancado">Trancado</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
+            />
+            {errors.status && (
+              <p className="text-sm text-red-600">{errors.status.message}</p>
+            )}
           </div>
 
           <div className="space-y-2">
             <Label>Turmas</Label>
-            <div className="flex flex-wrap gap-2">
-              {turmas.map((turma) => (
-                <Badge
-                  key={turma.id}
-                  variant={
-                    formData.turma_ids.includes(turma.id)
-                      ? 'default'
-                      : 'outline'
-                  }
-                  className="cursor-pointer"
-                  onClick={() => toggleTurma(turma.id)}
-                >
-                  {turma.nome}
-                </Badge>
-              ))}
-            </div>
+            <Controller
+              name="turmas"
+              control={control}
+              render={({ field }) => (
+                <div className="flex flex-wrap gap-2">
+                  {turmas.map((turma) => (
+                    <Badge
+                      key={turma.id}
+                      variant={
+                        field.value.includes(turma.id) ? 'default' : 'outline'
+                      }
+                      className="cursor-pointer"
+                      onClick={() => toggleTurma(turma.id)}
+                    >
+                      {turma.nome}
+                    </Badge>
+                  ))}
+                </div>
+              )}
+            />
             {turmas.length === 0 && (
               <p className="text-sm text-muted-foreground">
                 Nenhuma turma disponível. Crie uma turma primeiro.
@@ -321,16 +373,16 @@ export function AlunoDialog({
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
-              disabled={loading}
+              disabled={isSubmitting || uploadMutation.isPending}
             >
               Cancelar
             </Button>
             <Button
               type="submit"
               className="bg-primary hover:bg-primary/90"
-              disabled={loading || uploading}
+              disabled={isSubmitting || uploadMutation.isPending}
             >
-              {loading ? (
+              {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Salvando...
