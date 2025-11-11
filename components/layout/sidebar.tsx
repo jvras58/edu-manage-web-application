@@ -82,23 +82,23 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
       <aside
         className={cn(
-          'fixed top-0 left-0 z-50 h-full w-64 bg-white border-r border-gray-200 transition-transform duration-300 lg:translate-x-0',
+          'fixed top-0 left-0 z-50 h-full w-64 bg-background border-r border-border transition-transform duration-300 lg:translate-x-0',
           isOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >
         <div className="flex flex-col h-full">
-          <div className="p-6 border-b border-gray-200">
+          <div className="p-6 border-b border-border">
             <Link
               href="/dashboard"
               className="flex items-center gap-3"
               onClick={onClose}
             >
-              <div className="bg-blue-600 p-2 rounded-lg">
-                <GraduationCap className="h-6 w-6 text-white" />
+              <div className="bg-primary p-2 rounded-lg">
+                <GraduationCap className="h-6 w-6 text-primary-foreground" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">EduManage</h1>
-                <p className="text-xs text-gray-600">Portal do Professor</p>
+                <h1 className="text-xl font-bold text-foreground">EduManage</h1>
+                <p className="text-xs text-muted-foreground">Portal do Professor</p>
               </div>
             </Link>
           </div>
@@ -116,8 +116,8 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                   className={cn(
                     'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
                     isActive
-                      ? 'bg-blue-50 text-blue-700 font-medium'
-                      : 'text-gray-700 hover:bg-gray-100'
+                      ? 'bg-primary/10 text-primary font-medium'
+                      : 'text-foreground hover:bg-muted'
                   )}
                 >
                   <Icon className="h-5 w-5" />
@@ -127,11 +127,11 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             })}
           </nav>
 
-          <div className="p-4 border-t border-gray-200 space-y-1">
+          <div className="p-4 border-t border-border space-y-1">
             <Link
               href="#"
               onClick={onClose}
-              className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors"
+              className="flex items-center gap-3 px-4 py-3 rounded-lg text-foreground hover:bg-muted transition-colors"
             >
               <Settings className="h-5 w-5" />
               <span>Configurações</span>
@@ -139,7 +139,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             <Button
               variant="ghost"
               onClick={handleLogout}
-              className="w-full justify-start gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              className="w-full justify-start gap-3 px-4 py-3 text-foreground hover:bg-muted hover:text-foreground"
             >
               <LogOut className="h-5 w-5" />
               <span>Sair</span>

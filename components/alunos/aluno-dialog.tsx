@@ -310,7 +310,7 @@ export function AlunoDialog({
               ))}
             </div>
             {turmas.length === 0 && (
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-muted-foreground">
                 Nenhuma turma disponível. Crie uma turma primeiro.
               </p>
             )}
@@ -327,7 +327,7 @@ export function AlunoDialog({
             </Button>
             <Button
               type="submit"
-              className="bg-blue-600 hover:bg-blue-700"
+              className="bg-primary hover:bg-primary/90"
               disabled={loading || uploading}
             >
               {loading ? (

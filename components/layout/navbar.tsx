@@ -118,7 +118,7 @@ export function Navbar({ onMenuClick }: NavbarProps) {
   const naoLidas = notificacoes.filter((n) => !n.lida).length;
 
   return (
-    <header className="sticky top-0 z-30 bg-white border-b border-gray-200">
+    <header className="sticky top-0 z-30 bg-background border-b border-border">
       <div className="flex items-center justify-between px-4 py-3 lg:px-6">
         <Button
           variant="ghost"
@@ -130,7 +130,7 @@ export function Navbar({ onMenuClick }: NavbarProps) {
         </Button>
 
         <div className="flex-1 lg:block hidden">
-          <h2 className="text-xl font-semibold text-gray-900">Dashboard</h2>
+          <h2 className="text-xl font-semibold text-foreground">Dashboard</h2>
         </div>
 
         <div className="flex items-center gap-3">
@@ -139,7 +139,7 @@ export function Navbar({ onMenuClick }: NavbarProps) {
               <Button variant="ghost" size="icon" className="relative">
                 <Bell className="h-5 w-5" />
                 {naoLidas > 0 && (
-                  <span className="absolute -top-1 -right-1 h-5 w-5 bg-red-500 rounded-full flex items-center justify-center text-white text-xs font-medium">
+                  <span className="absolute -top-1 -right-1 h-5 w-5 bg-destructive rounded-full flex items-center justify-center text-destructive-foreground text-xs font-medium">
                     {naoLidas > 9 ? '9+' : naoLidas}
                   </span>
                 )}
@@ -156,7 +156,7 @@ export function Navbar({ onMenuClick }: NavbarProps) {
               </div>
 
               {notificacoes.length === 0 ? (
-                <div className="px-4 py-8 text-center text-sm text-gray-500">
+                <div className="px-4 py-8 text-center text-sm text-muted-foreground">
                   Nenhuma notificação
                 </div>
               ) : (
@@ -165,16 +165,16 @@ export function Navbar({ onMenuClick }: NavbarProps) {
                     <div
                       key={notificacao.id}
                       className={cn(
-                        'px-4 py-3 border-b hover:bg-gray-50 transition-colors',
-                        !notificacao.lida && 'bg-blue-50'
+                        'px-4 py-3 border-b hover:bg-muted transition-colors',
+                        !notificacao.lida && 'bg-primary/5'
                       )}
                     >
                       <div className="flex items-start gap-3">
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm text-gray-900 line-clamp-2">
+                          <p className="text-sm text-foreground line-clamp-2">
                             {notificacao.mensagem}
                           </p>
-                          <p className="text-xs text-gray-500 mt-1">
+                          <p className="text-xs text-muted-foreground mt-1">
                             {new Date(notificacao.created_at).toLocaleString(
                               'pt-BR',
                               {
@@ -220,7 +220,7 @@ export function Navbar({ onMenuClick }: NavbarProps) {
               <DropdownMenuItem asChild className="cursor-pointer">
                 <Link
                   href="/notificacoes"
-                  className="w-full text-center py-2 text-sm font-medium text-blue-600"
+                  className="w-full text-center py-2 text-sm font-medium text-primary"
                 >
                   Ver todas as notificações
                 </Link>
@@ -230,14 +230,14 @@ export function Navbar({ onMenuClick }: NavbarProps) {
 
           {user && (
             <div className="flex items-center gap-3">
-              <Avatar className="h-9 w-9 bg-blue-600">
-                <AvatarFallback className="bg-blue-600 text-white text-sm">
+              <Avatar className="h-9 w-9 bg-primary">
+                <AvatarFallback className="bg-primary text-primary-foreground text-sm">
                   {getInitials(user.nome)}
                 </AvatarFallback>
               </Avatar>
               <div className="hidden md:block">
-                <p className="text-sm font-medium text-gray-900">{user.nome}</p>
-                <p className="text-xs text-gray-600">{user.email}</p>
+                <p className="text-sm font-medium text-foreground">{user.nome}</p>
+                <p className="text-xs text-muted-foreground">{user.email}</p>
               </div>
             </div>
           )}
