@@ -17,20 +17,20 @@ export default function LoginPage() {
                 <GraduationCap className="h-8 w-8 text-white" />
               </div>
             </div>
-            <h1 className="text-3xl font-bold text-gray-900">EduManage</h1>
-            <p className="text-gray-600 text-balance">Portal do Professor</p>
+            <h1 className="text-3xl font-bold text-foreground">EduManage</h1>
+            <p className="text-muted-foreground text-balance">Portal do Professor</p>
           </div>
           <LoginForm />
 
           <div className="pt-4 border-t text-center space-y-2">
-            <p className="text-sm text-gray-600">Contas de demonstração:</p>
-            <div className="text-xs text-gray-500 space-y-1">
+            <p className="text-sm text-muted-foreground">Contas de demonstração:</p>
+            <div className="text-xs text-muted-foreground space-y-1">
               <p>Admin: admin@edumanage.com</p>
               <p>Professor: maria.silva@edumanage.com</p>
               <p className="font-medium">Senha: 123456</p>
             </div>
           </div>
-          <p className="text-center text-sm text-gray-600 mt-6">
+          <p className="text-center text-sm text-muted-foreground mt-6">
             Sistema de Gestão Educacional
           </p>
         </div>

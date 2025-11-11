@@ -7,7 +7,7 @@ export default function CriteriosLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <main className="p-4 lg:p-6">
         <CriteriosProvider>{children}</CriteriosProvider>
       </main>
