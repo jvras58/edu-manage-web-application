@@ -17,8 +17,11 @@ import {
 import { TurmasSearch } from '@/modules/dashboard/turmas/components/TurmasSearch';
 import { TurmasList } from '@/modules/dashboard/turmas/components/TurmasList';
 import { Turma } from '@/modules/dashboard/turmas/types/turmas.types';
+import { Button } from '@/components/ui/button';
+import { Plus } from 'lucide-react';
+import { ExportButton } from '@/components/ui/export-button';
 
-export function TurmasContent() {
+export function TurmasDashboard() {
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [turmas, setTurmas] = useState<Turma[]>([]);
@@ -97,7 +100,22 @@ export function TurmasContent() {
   }
 
   return (
-    <>
+    <div className="space-y-6">
+      <div className="flex gap-2">
+        <ExportButton
+          endpoint="/api/turmas/export"
+          filename="turmas.csv"
+          label="Exportar"
+        />
+        <Button
+          className="bg-blue-600 hover:bg-blue-700"
+          onClick={handleCreate}
+        >
+          <Plus className="h-4 w-4 mr-2" />
+          Nova Turma
+        </Button>
+      </div>
+
       <TurmasSearch search={search} onSearchChange={setSearch} />
 
       <TurmasList
@@ -141,6 +159,6 @@ export function TurmasContent() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </>
+    </div>
   );
 }
