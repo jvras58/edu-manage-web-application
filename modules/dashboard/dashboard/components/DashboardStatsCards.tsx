@@ -1,6 +1,6 @@
 'use client';
 
-import { StatsCard } from '@/components/dashboard/stats-card';
+import { StatsCard } from '@/modules/dashboard/dashboard/components/StatsCard';
 import { Users, BookOpen, ClipboardList, Bell } from 'lucide-react';
 import { DashboardStats } from '@/modules/dashboard/dashboard/types/dashboard.types';
 
