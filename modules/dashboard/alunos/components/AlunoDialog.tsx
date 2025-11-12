@@ -168,10 +168,10 @@ export function AlunoDialog({
       onOpenChange={onOpenChange}
       config={config}
       initialData={aluno ? {
+        foto_url: aluno.foto_url || '',
         nome: aluno.nome,
         matricula: aluno.matricula,
         email: aluno.email || '',
-        foto_url: aluno.foto_url || '',
         status: aluno.status,
         turmas: aluno.turmas?.map((t) => t.turma_id) || [],
       } : null}

@@ -1,7 +1,7 @@
 'use client';
 
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import { AlunoDialog } from '@/components/alunos/aluno-dialog';
+import { AlunoDialog } from '@/modules/dashboard/alunos/components/AlunoDialog';
 import {
   AlertDialog,
   AlertDialogAction,

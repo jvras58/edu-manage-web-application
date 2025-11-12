@@ -72,7 +72,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ alunos: alunosFormatted });
   } catch (error) {
-    console.error('  Get alunos error:', error);
+    console.error('Get alunos error:', error);
     return NextResponse.json(
       { error: 'Erro ao obter alunos' },
       { status: 500 }
@@ -89,7 +89,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { nome, matricula, email, foto_url, status, turma_ids } = body;
+    const { nome, matricula, email, foto_url, status, turmas } = body;
 
     if (!nome || !matricula) {
       return NextResponse.json(
@@ -119,8 +119,8 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    if (turma_ids && Array.isArray(turma_ids) && turma_ids.length > 0) {
-      for (const turmaId of turma_ids) {
+    if (turmas && Array.isArray(turmas) && turmas.length > 0) {
+      for (const turmaId of turmas) {
         const turmaValida = await prisma.turma.findFirst({
           where: {
             id: turmaId,
