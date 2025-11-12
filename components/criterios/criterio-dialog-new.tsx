@@ -5,7 +5,6 @@ import { useMutation } from '@tanstack/react-query';
 import { GenericDialog, GenericDialogConfig } from '@/components/generic-dialog';
 import { criterioSchema } from '@/modules/dashboard/criterios/schemas/criterio.schema';
 import { useToast } from '@/hooks/use-toast';
-// passar para a outra branch
 interface Criterio {
   id: string;
   nome: string;
