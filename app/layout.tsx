@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 
 import { Analytics } from '@vercel/analytics/next';
-import { AuthProvider } from '@/components/providers/auth-provider';
-import { QueryProvider } from '@/components/providers/query-provider';
+import { AuthProvider } from '@/providers/auth-provider';
+import { QueryProvider } from '@/providers/query-provider';
 import './globals.css';
 
 export const metadata: Metadata = {
