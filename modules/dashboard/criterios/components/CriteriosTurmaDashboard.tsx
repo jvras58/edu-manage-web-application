@@ -1,7 +1,7 @@
 'use client';
 
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import { CriterioDialog } from '@/components/criterios/criterio-dialog';
+import { CriterioDialog } from '@/modules/dashboard/criterios/components/CriterioDialog';
 import {
   AlertDialog,
   AlertDialogAction,

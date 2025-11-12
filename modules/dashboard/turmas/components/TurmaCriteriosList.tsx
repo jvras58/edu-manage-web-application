@@ -2,7 +2,7 @@
 
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { CriterioDialog } from '@/components/criterios/criterio-dialog';
+import { CriterioDialog } from '@/modules/dashboard/criterios/components/CriterioDialog';
 import { useCriteriosTurma } from '@/modules/dashboard/criterios/providers/CriteriosTurmaProvider';
 import { useTurmaDetalhes } from '@/modules/dashboard/turmas/providers/TurmaDetalhesProvider';
 import { Edit, Trash2 } from 'lucide-react';
