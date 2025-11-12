@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { useToast } from '@/hooks/use-toast';
-import { TurmaDialog } from '@/components/turmas/turma-dialog';
+import { TurmaDialog } from '@/modules/dashboard/turmas/components/TurmasDialog';
 import {
   AlertDialog,
   AlertDialogAction,
